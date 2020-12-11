@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-def find_options_new( length, filled ):
+def find_options( length, filled ):
     total_filled = sum( filled )
     total_empty = length - total_filled
     extra = total_empty - len( filled ) + 1
@@ -23,7 +23,7 @@ def find_options_new( length, filled ):
             total_blanks -= 1
 
         if len( filled ) > 1:
-            subs = find_options_new( length - len( line ), filled[1:] )
+            subs = find_options( length - len( line ), filled[1:] )
 
             for sub in subs:
                 lines.append( line + sub )
@@ -34,10 +34,27 @@ def find_options_new( length, filled ):
 
     return( lines )
 
-patterns = find_options_new( 15, [1, 1, 9] )
+def find_overlap( length, patterns ):
+    overlap = 0xFFFFFFFF;
+
+    for pattern in patterns:
+        overlap &= int( pattern, base=2 )
+
+    return( "{0:b}\n".format( overlap ).zfill( length + 1 ) )
+
+def compare_existing( length, patterns, existing ):
+    pattern = int( find_overlap( length, patterns ), base=2 )
+
+    pattern |= int( existing, base=2 )
+
+    return( "{0:b}\n".format( pattern ).zfill( length + 1 ) )
+
+patterns = find_options( 15, [1, 1, 9] )
 
 for pattern in patterns:
     print( pattern )
     print( "Bin: %u" % int( pattern, base=2 ) )
 
-#find_options( '', 15, [2, 2, 1] )
+print( "Overlap: %s" % find_overlap( 15, patterns ) )
+
+print( "Existing: %s" % (compare_existing( 15, patterns, "111111111000000" )) )
