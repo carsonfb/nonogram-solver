@@ -40,21 +40,98 @@ def find_overlap( length, patterns ):
     for pattern in patterns:
         overlap &= int( pattern, base=2 )
 
-    return( "{0:b}\n".format( overlap ).zfill( length + 1 ) )
+    return( "{0:b}".format( overlap ).zfill( length + 1 ) )
 
-def compare_existing( length, patterns, existing ):
+def compare_existing( length, patterns, existing='000000000000000'):
     pattern = int( find_overlap( length, patterns ), base=2 )
 
     pattern |= int( existing, base=2 )
 
-    return( "{0:b}\n".format( pattern ).zfill( length + 1 ) )
+    return( "{0:b}".format( pattern ).zfill( length + 1 ) )
 
-patterns = find_options( 15, [1, 1, 9] )
+def update_existing( from_existing, to_existing ):
+    for row_index in range(0, len( from_existing ) ):
+        for col_index in range(0, len( to_existing ) ):
+            if from_existing[row_index][col_index] == '1':
+                to_existing[col_index] = to_existing[col_index][:row_index] + '1' + to_existing[col_index][row_index+1:]
 
-for pattern in patterns:
-    print( pattern )
-    print( "Bin: %u" % int( pattern, base=2 ) )
+    return( to_existing )
 
-print( "Overlap: %s" % find_overlap( 15, patterns ) )
+#print( "Existing: %s" % (compare_existing( 15, patterns, "111111111000000" )) )
 
-print( "Existing: %s" % (compare_existing( 15, patterns, "111111111000000" )) )
+length = 15
+
+horizontal_grid = [
+    [3,2],
+    [1,4,1],
+    [2],
+    [1,2],
+    [1,5],
+    [2,7],
+    [11],
+    [5,2],
+    [4,5],
+    [3,2,1],
+    [3,1,3],
+    [2,3,3],
+    [2,3,3],
+    [1,2,2,2],
+    [5,4]
+]
+
+vertical_grid = [
+    [2,2],
+    [1,1,3],
+    [2,2,5,1],
+    [1,1,9],
+    [1,5,3,1],
+    [1,5,1],
+    [1,5,2],
+    [3,2,3],
+    [2,2],
+    [2,6],
+    [2,2,2],
+    [1,1,1,],
+    [3,5],
+    [2,4],
+    [5]
+]
+
+horizontal_existing = []
+vertical_existing = []
+
+horizontal_backup = []
+vertical_backup = []
+
+for row in horizontal_grid:
+    patterns = find_options( length, row )
+    
+    horizontal_existing.append( find_overlap( length, patterns ) )
+
+for row in vertical_grid:
+    patterns = find_options( length, row )
+
+    vertical_existing.append( find_overlap( length, patterns ) )
+
+done = 0
+
+while (not done):
+    print( "\n\n" )
+
+    horizontal_backup = horizontal_existing[:]
+    vertical_backup = vertical_existing[:]
+
+    print( "Horizontal:\n%s\n\n" % horizontal_existing )
+    print( "Vertical:  \n%s\n\n" % vertical_existing   )
+
+    horizontal_existing = update_existing( vertical_existing,   horizontal_existing )
+    vertical_existing   = update_existing( horizontal_existing, vertical_existing   )
+
+    print( "Horizontal:\n%s\n\n" % horizontal_existing )
+    print( "Vertical:  \n%s\n\n" % vertical_existing   )
+
+    if (horizontal_existing == horizontal_backup and vertical_existing == vertical_backup):
+        done = 1
+
+for row in horizontal_existing:
+    print( row )
