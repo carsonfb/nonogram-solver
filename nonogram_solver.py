@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 def find_options( length, filled ):
+    # This is okay
     total_filled = sum( filled )
     total_empty = length - total_filled
     extra = total_empty - len( filled ) + 1
@@ -35,25 +36,31 @@ def find_options( length, filled ):
     return( lines )
 
 def find_overlap( length, patterns ):
+    # This is okay
     overlap = 0xFFFFFFFF;
 
     for pattern in patterns:
         overlap &= int( pattern, base=2 )
 
-    return( "{0:b}".format( overlap ).zfill( length + 1 ) )
+    return( "{0:b}".format( overlap ).zfill( length ) )
 
+# TODO: Existing should be '0' * length if it is not set
 def compare_existing( length, patterns, existing='000000000000000'):
     pattern = int( find_overlap( length, patterns ), base=2 )
 
     pattern |= int( existing, base=2 )
 
-    return( "{0:b}".format( pattern ).zfill( length + 1 ) )
+    return( "{0:b}".format( pattern ).zfill( length ) )
 
 def update_existing( from_existing, to_existing ):
     for row_index in range(0, len( from_existing ) ):
         for col_index in range(0, len( to_existing ) ):
+            #print( "Coordinates: %u, %u --> %s" % (row_index, col_index, from_existing[row_index][col_index]) )
+
             if from_existing[row_index][col_index] == '1':
                 to_existing[col_index] = to_existing[col_index][:row_index] + '1' + to_existing[col_index][row_index+1:]
+
+    print( "\n\n" )
 
     return( to_existing )
 
@@ -105,7 +112,7 @@ vertical_backup = []
 
 for row in horizontal_grid:
     patterns = find_options( length, row )
-    
+
     horizontal_existing.append( find_overlap( length, patterns ) )
 
 for row in vertical_grid:
@@ -124,8 +131,8 @@ while (not done):
     print( "Horizontal:\n%s\n\n" % horizontal_existing )
     print( "Vertical:  \n%s\n\n" % vertical_existing   )
 
-    horizontal_existing = update_existing( vertical_existing,   horizontal_existing )
     vertical_existing   = update_existing( horizontal_existing, vertical_existing   )
+    horizontal_existing = update_existing( vertical_existing,   horizontal_existing )
 
     print( "Horizontal:\n%s\n\n" % horizontal_existing )
     print( "Vertical:  \n%s\n\n" % vertical_existing   )
