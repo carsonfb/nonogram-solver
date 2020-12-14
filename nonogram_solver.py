@@ -1,5 +1,7 @@
 #! /usr/bin/python3
 
+from itertools import groupby
+
 """
     This program will solve nonogram puzzles for any x*x size with given starting conditions.
 """
@@ -87,6 +89,53 @@ def update_existing(col_existing, row_existing):
 
     return row_existing, col_existing
 
+def find_empty(grid, existing):
+    """ This function is a stub to find the locations that cannot be set. """
+
+    empty = []
+
+    for row in range(0, len(grid)):
+        empty.append('0' * len(grid))
+
+    for index in range(0, len(existing)):
+        runs = groupby(existing[index])
+        result = [(label, sum(1 for _ in group)) for label, group in runs]
+
+        total_filled = sum(grid[index])
+        total_line = 0
+
+        for key, value in result:
+            if key == '1':
+                total_line += value
+
+        # #1
+        if len(grid[index]) == 1:
+            if total_line == total_filled:
+                for col in range(0, len(existing[index])):
+                    if existing[index][col] == '0':
+                        empty[index] \
+                            = empty[index][:col] \
+                            + '0' \
+                            + empty[index][col+1:]
+                    else:
+                        empty[index] \
+                            = empty[index][:col] \
+                            + '1' \
+                            + empty[index][col+1:]
+
+        print("%u of %u" % (total_line, total_filled))
+
+    print("\n\nEMPTY:\n%s\n\n" % empty)
+
+
+    # TODO #1: If only one value in grid, set all out-of-range values in empty.
+
+    # TODO #2: If all 1s are accounted for, set all non-1s in existing to 1s in empty.
+
+    # TODO #3: If a complete value in existing, mark its borders in empty.
+
+    return
+
 def solve(length, horizontal_grid, vertical_grid):
     """
         This function will solve a nonogram given the length, horizontal_grid, and vertical_grid.
@@ -123,7 +172,11 @@ def solve(length, horizontal_grid, vertical_grid):
 
         passes += 1
 
-    print( "Passes: %u\n" % passes )
+    print("Passes: %u\n\n" % passes)
+
+    find_empty(horizontal_grid, horizontal_existing)
+
+    print("\n\n")
 
     return horizontal_existing
 
@@ -164,6 +217,8 @@ VERTICAL_GRID = [
     [2,4],
     [5]
 ]
+
+# TODO: Need to determine what cannot be filled in as well.
 
 for solved in solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID):
     print(solved)
