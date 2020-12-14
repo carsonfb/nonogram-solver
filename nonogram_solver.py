@@ -108,31 +108,37 @@ def find_empty(grid, existing):
             if key == '1':
                 total_line += value
 
-        # #1
-        if len(grid[index]) == 1:
+        if len(grid[index]) == 1 or total_filled == total_line:
+            # #1 -- works
+            # #2 -- needs to be tested
             if total_line == total_filled:
                 for col in range(0, len(existing[index])):
                     if existing[index][col] == '0':
-                        empty[index] \
-                            = empty[index][:col] \
-                            + '0' \
-                            + empty[index][col+1:]
+                        empty[index] = empty[index][:col] + '1' + empty[index][col+1:]
                     else:
-                        empty[index] \
-                            = empty[index][:col] \
-                            + '1' \
-                            + empty[index][col+1:]
+                        empty[index] = empty[index][:col] + '0' + empty[index][col+1:]
+
+        # #3 is going to be difficult
+
+        # #3 is going to be very difficult
 
         print("%u of %u" % (total_line, total_filled))
 
-    print("\n\nEMPTY:\n%s\n\n" % empty)
+    print("\n\nEMPTY")
 
+    for row in empty:
+        print("%s" % row)
+
+    print("\n\n")
 
     # TODO #1: If only one value in grid, set all out-of-range values in empty.
 
     # TODO #2: If all 1s are accounted for, set all non-1s in existing to 1s in empty.
 
-    # TODO #3: If a complete value in existing, mark its borders in empty.
+    # TODO #3: If some squares cannot be filled in, then mark them as empty (like 8 of 11 of 15)
+
+    # TODO #4: If a complete value in existing, mark its borders in empty.
+
 
     return
 
