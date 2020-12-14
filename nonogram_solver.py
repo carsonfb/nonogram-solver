@@ -108,6 +108,7 @@ def solve(length, horizontal_grid, vertical_grid):
 
         vertical_existing.append(find_overlap(length, patterns))
 
+    passes = 0
     done = 0
 
     while not done:
@@ -119,6 +120,10 @@ def solve(length, horizontal_grid, vertical_grid):
 
         if (horizontal_existing == horizontal_backup and vertical_existing == vertical_backup):
             done = 1
+
+        passes += 1
+
+    print( "Passes: %u\n" % passes )
 
     return horizontal_existing
 
@@ -159,8 +164,6 @@ VERTICAL_GRID = [
     [2,4],
     [5]
 ]
-
-# TODO: Keep track of the number of passes.
 
 for solved in solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID):
     print(solved)
