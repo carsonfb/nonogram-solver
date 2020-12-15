@@ -213,6 +213,19 @@ def solve(length, horizontal_grid, vertical_grid):
         vertical_existing, horizontal_existing \
             = update_existing(horizontal_existing, vertical_existing)
 
+        # TODO: Call find_options and find_overlap again with the filled in data.
+        for index in range(0, len(horizontal_grid)):
+            # Find the initial patterns for each row.
+            patterns = find_options(length, horizontal_grid[index], horizontal_existing[index])
+
+            horizontal_existing[index] = find_overlap(length, patterns)
+
+        for index in range(0, len(vertical_grid)):
+            # Find the initial patterns for each column.
+            patterns = find_options(length, vertical_grid[index], vertical_existing[index])
+
+            vertical_existing[index] = find_overlap(length, patterns)
+
         if (horizontal_existing == horizontal_backup and vertical_existing == vertical_backup):
             done = 1
 
@@ -269,19 +282,23 @@ VERTICAL_GRID = [
 for solved in solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID):
     print(solved)
 
-patterns = find_options(LENGTH, HORIZONTAL_GRID[10])
+#patterns = find_options(LENGTH, HORIZONTAL_GRID[10])
 
-print("\n\nInitial:\n--------")
+#print("\n\nInitial:\n--------")
 
-for pattern in patterns:
-    print(pattern)
+#for pattern in patterns:
+#    print(pattern)
 
-patterns = find_options(LENGTH, HORIZONTAL_GRID[10], "001110000000000")
+#patterns = find_options(LENGTH, HORIZONTAL_GRID[10], "001110000000000")
 
-print("\n\nUpdated:\n--------")
+#print("\n\nUpdated:\n--------")
 
-for pattern in patterns:
-    print(pattern)
+#for pattern in patterns:
+#    print(pattern)
+
+#overlap = find_overlap(LENGTH, patterns)
+
+#print("\n\nOverlap:\n--------\n%s\n\n" % overlap)
 
 # TODO: Do we need an existing for horizontal and vertical?  If not, then the calls to
 #       update_existing.
