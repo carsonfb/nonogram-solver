@@ -9,6 +9,9 @@ from itertools import groupby
 def find_options(length, filled):
     """ This function finds all possibilities for the starting condition of the rows or columns. """
 
+    # TODO: Make a version of this function that takes a pattern to compare with (already filled out
+    #       row) and skip any pattern that doesn't match.
+
     total_filled = sum(filled)
     total_empty = length - total_filled
     extra = total_empty - len(filled) + 1
@@ -16,40 +19,55 @@ def find_options(length, filled):
     ones = filled[0]
 
     for pad in range(0, extra + 1):
+        # Loop over each possible set of padding.
+
         line = ''
         blanks = len(filled)
         total_blanks = total_empty - pad
 
+        # Set the first value of the sub-string.
         line += '0' * pad
         line += '1' * ones
 
+        # Subtract from the number of dividers left.
         blanks -= 1
 
         if blanks > 0:
+            # If there are still dividers, leave a blank for it.
             line += '0'
 
+            # Subtract this divider from the total blanks left.
             total_blanks -= 1
 
         if len(filled) > 1:
+            # If the string has not been fully built yet, then generate the next sub-string.
             subs = find_options(length - len(line), filled[1:])
 
             for sub in subs:
+                # Append this section with the sub-sections found in the recursion.
                 lines.append(line + sub)
         else:
+            # There are no parts left so pad with the remaining blanks.
             line += '0' * total_blanks
 
+            # Add the string to the possible values.
             lines.append(line)
 
+    # Return the possible values.
     return lines
 
 def find_overlap(length, patterns):
     """ This function finds the overlap between the current possibilities for a row or column. """
 
+    # Set the initial maks to everything set.  This handles up to a 32x32 grid.
     overlap = 0xFFFFFFFF
 
     for pattern in patterns:
+        # Convert each possibility to an integer based on the string bit pattern and generate
+        # the overlap mask.
         overlap &= int(pattern, base=2)
 
+    # Return the value as a bit pattern string.
     return "{0:b}".format(overlap).zfill(length)
 
 def compare_existing(length, patterns, existing=''):
@@ -59,12 +77,16 @@ def compare_existing(length, patterns, existing=''):
     """
 
     if existing == '':
+        # Set the default to a completely unset bit pattern string.
         existing = '0' * length
 
+    # Lookup the overlap value.
     pattern = int(find_overlap(length, patterns), base=2)
 
+    # Merge the overlap value and the already existing value.
     pattern |= int(existing, base=2)
 
+    # Return the value as a bit pattern string.
     return "{0:b}".format(pattern).zfill(length)
 
 def update_existing(col_existing, row_existing):
@@ -108,19 +130,22 @@ def find_empty(grid, existing):
             if key == '1':
                 total_line += value
 
-        if len(grid[index]) == 1 or total_filled == total_line:
+        if total_filled == total_line:
             # #1 -- works
             # #2 -- needs to be tested
-            if total_line == total_filled:
-                for col in range(0, len(existing[index])):
-                    if existing[index][col] == '0':
-                        empty[index] = empty[index][:col] + '1' + empty[index][col+1:]
-                    else:
-                        empty[index] = empty[index][:col] + '0' + empty[index][col+1:]
+            for col in range(0, len(existing[index])):
+                if existing[index][col] == '0':
+                    empty[index] = empty[index][:col] + '1' + empty[index][col+1:]
+                else:
+                    empty[index] = empty[index][:col] + '0' + empty[index][col+1:]
+
+        if total_filled >= total_line:
+            # #3
+            pass
 
         # #3 is going to be difficult
 
-        # #3 is going to be very difficult
+        # #4 is going to be very difficult
 
         print("%u of %u" % (total_line, total_filled))
 
@@ -132,6 +157,7 @@ def find_empty(grid, existing):
     print("\n\n")
 
     # TODO #1: If only one value in grid, set all out-of-range values in empty.
+    #          (really just a special case of #2)
 
     # TODO #2: If all 1s are accounted for, set all non-1s in existing to 1s in empty.
 
