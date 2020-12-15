@@ -6,11 +6,8 @@
 
 from itertools import groupby
 
-def find_options(length, filled):
+def find_options(length, filled, pattern=''):
     """ This function finds all possibilities for the starting condition of the rows or columns. """
-
-    # TODO: Make a version of this function that takes a pattern to compare with (already filled out
-    #       row) and skip any pattern that doesn't match.
 
     # TODO: Make a version of this for the empty hash as well.
 
@@ -54,6 +51,17 @@ def find_options(length, filled):
 
             # Add the string to the possible values.
             lines.append(line)
+
+    if len(lines[0]) == length and pattern != '':
+        temp_lines = []
+
+        mask = int(pattern, base=2)
+
+        for line in lines:
+            if (int(line, base=2) & mask) == mask:
+                temp_lines.append(line)
+
+            lines = temp_lines
 
     # Return the possible values.
     return lines
@@ -167,7 +175,6 @@ def find_empty(grid, existing):
 
     # TODO #4: If a complete value in existing, mark its borders in empty.
 
-
     return empty
 
 def solve(length, horizontal_grid, vertical_grid):
@@ -182,12 +189,14 @@ def solve(length, horizontal_grid, vertical_grid):
     vertical_backup = []
 
     for row in horizontal_grid:
+        # Find the initial patterns for each row.
         patterns = find_options(length, row)
 
         horizontal_existing.append(find_overlap(length, patterns))
 
-    for row in vertical_grid:
-        patterns = find_options(length, row)
+    for col in vertical_grid:
+        # Find the initial patterns for each column.
+        patterns = find_options(length, col)
 
         vertical_existing.append(find_overlap(length, patterns))
 
@@ -195,6 +204,9 @@ def solve(length, horizontal_grid, vertical_grid):
     done = 0
 
     while not done:
+        # If changes were made to the grid, keep trying to solve the puzzle.
+
+        # Set the backed-up data to the current data.
         horizontal_backup = horizontal_existing[:]
         vertical_backup = vertical_existing[:]
 
@@ -256,3 +268,22 @@ VERTICAL_GRID = [
 
 for solved in solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID):
     print(solved)
+
+patterns = find_options(LENGTH, HORIZONTAL_GRID[10])
+
+print("\n\nInitial:\n--------")
+
+for pattern in patterns:
+    print(pattern)
+
+patterns = find_options(LENGTH, HORIZONTAL_GRID[10], "001110000000000")
+
+print("\n\nUpdated:\n--------")
+
+for pattern in patterns:
+    print(pattern)
+
+# TODO: Do we need an existing for horizontal and vertical?  If not, then the calls to
+#       update_existing.
+
+# TODO: Can ternary be used instead of binary in order to combine the existing and empty data sets?
