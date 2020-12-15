@@ -1,16 +1,18 @@
 #! /usr/bin/python3
 
-from itertools import groupby
-
 """
     This program will solve nonogram puzzles for any x*x size with given starting conditions.
 """
+
+from itertools import groupby
 
 def find_options(length, filled):
     """ This function finds all possibilities for the starting condition of the rows or columns. """
 
     # TODO: Make a version of this function that takes a pattern to compare with (already filled out
     #       row) and skip any pattern that doesn't match.
+
+    # TODO: Make a version of this for the empty hash as well.
 
     total_filled = sum(filled)
     total_empty = length - total_filled
@@ -166,7 +168,7 @@ def find_empty(grid, existing):
     # TODO #4: If a complete value in existing, mark its borders in empty.
 
 
-    return
+    return empty
 
 def solve(length, horizontal_grid, vertical_grid):
     """
