@@ -133,14 +133,14 @@ def find_empty(grid, existing):
         runs = groupby(existing[index])
         result = [(label, sum(1 for _ in group)) for label, group in runs]
 
-        total_filled = sum(grid[index])
-        total_line = 0
+        total_line = sum(grid[index])
+        total_filled = 0
 
         for key, value in result:
             if key == '1':
-                total_line += value
+                total_filled += value
 
-        if total_filled == total_line:
+        if total_line == total_filled:
             # #1 -- works
             # #2 -- needs to be tested
             for col in range(0, len(existing[index])):
@@ -148,16 +148,53 @@ def find_empty(grid, existing):
                     empty[index] = empty[index][:col] + '1' + empty[index][col+1:]
                 else:
                     empty[index] = empty[index][:col] + '0' + empty[index][col+1:]
-
-        if total_filled >= total_line:
+        elif total_filled >= total_line / 2:
             # #3
-            pass
+            print("%u of %u" % (total_filled, total_line))
+
+            left = total_line - total_filled
+
+            if len(grid[index]) == 1:
+                end = 0
+
+                for key, value in result:
+                    # TODO: Only works for one element in the grid.  This needs to be expanded.
+                    if key == '0':
+                        if value > left:
+                            if not end:
+                                start = len(existing[index]) - (value - left)
+
+                                if start == len(existing[index]) - 1:
+                                    empty[index] = '1' + empty[index][start:]
+                                else:
+                                    for pos in range(start, value - left):
+                                        empty[index] \
+                                            = empty[index][:pos] \
+                                            + '1' \
+                                            + empty[index][index+1:]
+
+                            else:
+                                start = len(existing[index]) - (value - left)
+
+                                if start == len(existing[index]) - 1:
+                                    empty[index] = empty[index][:start] + '1'
+                                else:
+                                    for pos in range(start, value - left):
+                                        empty[index] \
+                                            = empty[index][:pos] \
+                                            + '1' \
+                                            + empty[index][index+1:]
+                                    
+                    end = 1
+
+            total_missing = total_line - total_filled
+
+            print("Existing: %s" % existing[index])
+            print("Total Missing: %u\n" % total_missing)
 
         # #3 is going to be difficult
 
         # #4 is going to be very difficult
-
-        print("%u of %u" % (total_line, total_filled))
 
     print("\n\nEMPTY")
 
@@ -213,7 +250,8 @@ def solve(length, horizontal_grid, vertical_grid):
         vertical_existing, horizontal_existing \
             = update_existing(horizontal_existing, vertical_existing)
 
-        # TODO: Call find_options and find_overlap again with the filled in data.
+        # TODO: Also calculate possible patterns based on what has to be empty.
+
         for index in range(0, len(horizontal_grid)):
             # Find the initial patterns for each row.
             patterns = find_options(length, horizontal_grid[index], horizontal_existing[index])
