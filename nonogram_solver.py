@@ -131,6 +131,7 @@ def find_empty(grid, existing, empty=[]):
             empty.append('0' * len(grid))
 
     for index in range(0, len(existing)):
+        # Get the run lengths of 0s and 1s.
         runs = groupby(existing[index])
         result = [(label, sum(1 for _ in group)) for label, group in runs]
 
@@ -142,14 +143,17 @@ def find_empty(grid, existing, empty=[]):
                 total_filled += value
 
         if total_line == total_filled:
-            # #1 -- works
-            # #2 -- needs to be tested
+            # All of the spaces to fill are filled in.  Everything else has to be empty.
+
             for col in range(0, len(existing[index])):
+                # Set the values in empty to the opposite of their values in existing.
                 if existing[index][col] == '0':
                     empty[index] = empty[index][:col] + '1' + empty[index][col+1:]
                 else:
                     empty[index] = empty[index][:col] + '0' + empty[index][col+1:]
         elif total_filled >= total_line / 2:
+            # Over half of the spots are filled in, so we can determine some of the empty spots.
+
             # #3
             print("%u of %u" % (total_filled, total_line))
 
