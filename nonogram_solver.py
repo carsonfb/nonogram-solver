@@ -165,26 +165,27 @@ def find_empty(grid, existing, empty=[]):
                 for key, value in result:
                     # TODO: Only works if there is one element in the grid.  This needs to be expanded.
                     if key == '0':
+                        # This is only relevant for blanks, skip filled in ranges.
                         if value > left:
+                            # If the number of potential blanks is higher than the number of actual
+                            # blanks, then fill the differenc in.
                             if not end:
+                                # Start filling them in at the beginning.
                                 start = len(existing[index]) - (value - left)
 
-                                if start == len(existing[index]) - 1:
-                                    empty[index] = '1' + empty[index][start:]
-                                else:
-                                    for pos in range(start, value - left):
-                                        empty[index] \
-                                            = empty[index][:pos] \
-                                            + '1' \
-                                            + empty[index][index+1:]
-
+                                for pos in range(start, value - left):
+                                    # Set the calculated range to empty.
+                                    empty[index] = empty[index][:pos] + '1' + empty[index][index+1:]
                             else:
+                                # Start filling them in from the ending.
                                 start = len(existing[index]) - (value - left)
 
                                 if start == len(existing[index]) - 1:
+                                    # Only the last space needs to be set.
                                     empty[index] = empty[index][:start] + '1'
                                 else:
                                     for pos in range(start, value - left):
+                                        # Set the calculated range to empty.
                                         empty[index] \
                                             = empty[index][:pos] \
                                             + '1' \
@@ -209,7 +210,7 @@ def find_empty(grid, existing, empty=[]):
     print("\n\n")
 
     # TODO #1: If only one value in grid, set all out-of-range values in empty.
-    #          (really just a special case of #2)
+    #          (really just a special case of #2 and #3)
 
     # TODO #2: If all 1s are accounted for, set all non-1s in existing to 1s in empty.
 
