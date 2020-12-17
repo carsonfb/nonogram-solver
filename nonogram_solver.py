@@ -121,13 +121,14 @@ def update_existing(col_existing, row_existing):
 
     return row_existing, col_existing
 
-def find_empty(grid, existing):
+def find_empty(grid, existing, empty=[]):
     """ This function is a stub to find the locations that cannot be set. """
 
-    empty = []
+    if not empty:
+        # Initialize the empty structure if it is not set.
 
-    for row in range(0, len(grid)):
-        empty.append('0' * len(grid))
+        for row in range(0, len(grid)):
+            empty.append('0' * len(grid))
 
     for index in range(0, len(existing)):
         runs = groupby(existing[index])
@@ -158,7 +159,7 @@ def find_empty(grid, existing):
                 end = 0
 
                 for key, value in result:
-                    # TODO: Only works for one element in the grid.  This needs to be expanded.
+                    # TODO: Only works if there is one element in the grid.  This needs to be expanded.
                     if key == '0':
                         if value > left:
                             if not end:
@@ -263,6 +264,8 @@ def solve(length, horizontal_grid, vertical_grid):
             patterns = find_options(length, vertical_grid[index], vertical_existing[index])
 
             vertical_existing[index] = find_overlap(length, patterns)
+
+        # TODO: Check again, but this time taking empty into account.
 
         if (horizontal_existing == horizontal_backup and vertical_existing == vertical_backup):
             done = 1
