@@ -11,8 +11,7 @@ def find_options(length, filled, pattern=''):
 
     # TODO: Make a version of this for the empty hash as well.
 
-    total_filled = sum(filled)
-    total_empty = length - total_filled
+    total_empty = length - sum(filled)
     extra = total_empty - len(filled) + 1
     lines = []
     ones = filled[0]
@@ -121,19 +120,19 @@ def update_existing(col_existing, row_existing):
 
     return row_existing, col_existing
 
-def find_empty(grid, existing, empty=[]):
+def find_empty(grid, existing, empty=None):
     """ This function is a stub to find the locations that cannot be set. """
 
     if not empty:
         # Initialize the empty structure if it is not set.
+        empty = []
 
         for row in range(0, len(grid)):
             empty.append('0' * len(grid))
 
     for index in range(0, len(existing)):
         # Get the run lengths of 0s and 1s.
-        runs = groupby(existing[index])
-        result = [(label, sum(1 for _ in group)) for label, group in runs]
+        result = [(label, sum(1 for _ in group)) for label, group in groupby(existing[index])]
 
         total_line = sum(grid[index])
         total_filled = 0
@@ -169,16 +168,16 @@ def find_empty(grid, existing, empty=[]):
                         if value > left:
                             # If the number of potential blanks is higher than the number of actual
                             # blanks, then fill the differenc in.
+                            start = len(existing[index]) - (value - left)
+
                             if not end:
                                 # Start filling them in at the beginning.
-                                start = len(existing[index]) - (value - left)
 
                                 for pos in range(start, value - left):
                                     # Set the calculated range to empty.
                                     empty[index] = empty[index][:pos] + '1' + empty[index][index+1:]
                             else:
                                 # Start filling them in from the ending.
-                                start = len(existing[index]) - (value - left)
 
                                 if start == len(existing[index]) - 1:
                                     # Only the last space needs to be set.
@@ -196,7 +195,7 @@ def find_empty(grid, existing, empty=[]):
             total_missing = total_line - total_filled
 
             print("Existing: %s" % existing[index])
-            print("Total Missing: %u\n" % total_missing)
+            print("Total Missing: %u\n" % (total_line - total_filled))
 
         # #3 is going to be difficult
 
@@ -280,10 +279,25 @@ def solve(length, horizontal_grid, vertical_grid):
     print("Passes: %u\n\n" % passes)
 
     find_empty(horizontal_grid, horizontal_existing)
+    # TODO: Do the vertical grid also.
 
     print("\n\n")
 
     return horizontal_existing
+
+def find_empty_2(length, patterns):
+    mask = '1' * length
+
+    for index, pattern in enumerate(patterns):
+        # Flip the bits of each position.
+        patterns[index] = ''.join('1' if bit == '0' else '0' for bit in pattern)
+
+    empty = find_overlap(length, patterns)
+
+    print(f"\n\nEMPTY:\n{overlap}\n\n")
+
+    return overlap
+
 
 LENGTH = 15
 
@@ -328,6 +342,20 @@ VERTICAL_GRID = [
 for solved in solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID):
     print(solved)
 
+
+# TODO: vvv Incorporate this into the algorithm.  It finds empties better. vvv
+patterns = find_options(15, [3,1,3], pattern="001110000000000")
+
+print("\n\nPATTERNS:\n\n")
+
+for pattern in patterns:
+    print(pattern)
+
+print("\n")
+
+find_empty_2(LENGTH, patterns)
+# ^^^
+
 #patterns = find_options(LENGTH, HORIZONTAL_GRID[10])
 
 #print("\n\nInitial:\n--------")
@@ -347,6 +375,8 @@ for solved in solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID):
 #print("\n\nOverlap:\n--------\n%s\n\n" % overlap)
 
 # TODO: Do we need an existing for horizontal and vertical?  If not, then the calls to
-#       update_existing.
+#       update_existing can be combined.
 
-# TODO: Can ternary be used instead of binary in order to combine the existing and empty data sets?
+# TODO: This may be able to be simplified with numpy.
+
+# TODO: Can trinary be used instead of binary in order to combine the existing and empty data sets?
