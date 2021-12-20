@@ -181,7 +181,13 @@ def solve(length, horizontal_grid, vertical_grid):
 
         for index in range(0, len(horizontal_grid)):
             # Find the initial patterns for each row.
-            patterns = find_options(length, horizontal_grid[index], horizontal_existing[index], horizontal_empty[index])
+            patterns = find_options(
+                length,
+                horizontal_grid[index],
+                horizontal_existing[index],
+                horizontal_empty[index]
+            )
+
             empty = find_empty_2(length, patterns)
 
             horizontal_existing[index] = find_overlap(length, patterns)
@@ -189,7 +195,13 @@ def solve(length, horizontal_grid, vertical_grid):
 
         for index in range(0, len(vertical_grid)):
             # Find the initial patterns for each column.
-            patterns = find_options(length, vertical_grid[index], vertical_existing[index], vertical_empty[index])
+            patterns = find_options(
+                length,
+                vertical_grid[index],
+                vertical_existing[index],
+                vertical_empty[index]
+            )
+
             empty = find_empty_2(length, patterns)
 
             vertical_existing[index] = find_overlap(length, patterns)
@@ -221,38 +233,38 @@ def find_empty_2(length, potential):
 LENGTH = 15
 
 HORIZONTAL_GRID = [
-    [3,2],
-    [1,4,1],
+    [3, 2],
+    [1, 4, 1],
     [2],
-    [1,2],
-    [1,5],
-    [2,7],
+    [1, 2],
+    [1, 5],
+    [2, 7],
     [11],
-    [5,2],
-    [4,5],
-    [3,2,1],
-    [3,1,3],
-    [2,3,3],
-    [2,3,3],
-    [1,2,2,2],
-    [5,4]
+    [5, 2],
+    [4, 5],
+    [3, 2, 1],
+    [3, 1, 3],
+    [2, 3, 3],
+    [2, 3, 3],
+    [1, 2, 2, 2],
+    [5, 4]
 ]
 
 VERTICAL_GRID = [
-    [2,2],
-    [1,1,3],
-    [2,2,5,1],
-    [1,1,9],
-    [1,5,3,1],
-    [1,5,1],
-    [1,5,2],
-    [3,2,3],
-    [2,2],
-    [2,6],
-    [2,2,2],
-    [1,1,1,],
-    [3,5],
-    [2,4],
+    [2, 2],
+    [1, 1, 3],
+    [2, 2, 5, 1],
+    [1, 1, 9],
+    [1, 5, 3, 1],
+    [1, 5, 1],
+    [1, 5, 2],
+    [3, 2, 3],
+    [2, 2],
+    [2, 6],
+    [2, 2, 2],
+    [1, 1, 1],
+    [3, 5],
+    [2, 4],
     [5]
 ]
 
