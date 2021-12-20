@@ -277,5 +277,3 @@ if __name__ == "__main__":
     main()
 
 # TODO: This may be able to be simplified with numpy.
-
-# TODO: Can trinary be used instead of binary in order to combine the existing and empty data sets?
