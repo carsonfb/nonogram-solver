@@ -139,26 +139,21 @@ def solve(length, horizontal_grid, vertical_grid):
     vertical_backup = []
 
     horizontal_empty = []
-    hempty_backup = []
-
     vertical_empty = []
-    vempty_backup = []
 
     for row in horizontal_grid:
         # Find the initial patterns for each row.
         patterns = find_options(length, row)
-        empty = find_empty_2(length, patterns)
 
         horizontal_existing.append(find_overlap(length, patterns))
-        horizontal_empty.append(empty)
+        horizontal_empty.append(find_empty_2(length, patterns))
 
     for col in vertical_grid:
         # Find the initial patterns for each column.
         patterns = find_options(length, col)
-        empty = find_empty_2(length, patterns)
 
         vertical_existing.append(find_overlap(length, patterns))
-        vertical_empty.append(empty)
+        vertical_empty.append(find_empty_2(length, patterns))
 
     passes = 0
     done = 0
@@ -170,9 +165,6 @@ def solve(length, horizontal_grid, vertical_grid):
         horizontal_backup = horizontal_existing[:]
         vertical_backup = vertical_existing[:]
 
-        hempty_backup = horizontal_empty[:]
-        vempty_backup = vertical_empty[:]
-
         vertical_existing, horizontal_existing \
             = update_existing(horizontal_existing, vertical_existing)
 
@@ -180,7 +172,7 @@ def solve(length, horizontal_grid, vertical_grid):
             = update_existing(horizontal_empty, vertical_empty)
 
         for index in range(0, len(horizontal_grid)):
-            # Find the initial patterns for each row.
+            # Find the current patterns for each row.
             patterns = find_options(
                 length,
                 horizontal_grid[index],
@@ -188,13 +180,14 @@ def solve(length, horizontal_grid, vertical_grid):
                 horizontal_empty[index]
             )
 
-            empty = find_empty_2(length, patterns)
-
+            # Update the horizontal positions.
             horizontal_existing[index] = find_overlap(length, patterns)
-            horizontal_empty[index] = empty
+
+            # Find the empty positions for the available patterns.
+            horizontal_empty[index] = find_empty_2(length, patterns)
 
         for index in range(0, len(vertical_grid)):
-            # Find the initial patterns for each column.
+            # Find the current patterns for each column.
             patterns = find_options(
                 length,
                 vertical_grid[index],
@@ -202,10 +195,11 @@ def solve(length, horizontal_grid, vertical_grid):
                 vertical_empty[index]
             )
 
-            empty = find_empty_2(length, patterns)
-
+            # Update the vertical positions.
             vertical_existing[index] = find_overlap(length, patterns)
-            vertical_empty[index] = empty
+
+            # Find the empty positions for the available patterns.
+            vertical_empty[index] = find_empty_2(length, patterns)
 
         if (horizontal_existing == horizontal_backup and vertical_existing == vertical_backup):
             done = 1
@@ -217,14 +211,15 @@ def solve(length, horizontal_grid, vertical_grid):
     return horizontal_existing, horizontal_empty
 
 def find_empty_2(length, potential):
-    patterns = potential[:]
+    """ This function finds the empty positions based of the potential fill positions. """
 
-    mask = '1' * length
+    patterns = potential[:]
 
     for index, pattern in enumerate(patterns):
         # Flip the bits of each position.
         patterns[index] = ''.join('1' if bit == '0' else '0' for bit in pattern)
 
+    # Find the overlap of the empty positions.
     empty = find_overlap(length, patterns)
 
     return empty
@@ -268,12 +263,18 @@ VERTICAL_GRID = [
     [5]
 ]
 
-solved, empty = solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID)
+def main():
+    """ This is the main function of the program. """
 
-print("SOLVED:\t\tEMPTY:")
+    solved, empty = solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID)
 
-for index in range(LENGTH):
-    print(f"{solved[index]}\t{empty[index]}")
+    print("SOLVED:\t\tEMPTY:")
+
+    for index in range(LENGTH):
+        print(f"{solved[index]}\t{empty[index]}")
+
+if __name__ == "__main__":
+    main()
 
 # TODO: This may be able to be simplified with numpy.
 
