@@ -4,6 +4,8 @@
     This program will solve nonogram puzzles for any x*x size with given starting conditions.
 """
 
+import webview
+
 def find_options(length, filled, pattern='', empty=''):
     """ This function finds all possibilities for the starting condition of the rows or columns. """
 
@@ -277,7 +279,15 @@ def main():
     for index in range(LENGTH):
         print(f'{solved[index]}\t{empty[index]}')
 
+    window = webview.create_window("Nonogram Solver", "web/main.html")
+
+    window.expose(solve)
+
+    webview.start(http_server=True)
+
+
 if __name__ == '__main__':
     main()
+
 
 # TODO: This may be able to be simplified with numpy.

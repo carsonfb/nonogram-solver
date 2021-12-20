@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Eel Example</title>
+		<script src="js/base.js"></script>
+		<link rel="stylesheet" href="css/styles.css">
+	</head>
+	 <body>
+		  <form id="size_form" name="size_form">
+				<label id="size_label" for="size_entry">Size</label>
+				<select id="size_entry" name="size_entry" onChange="display_grid(this.value);">
+					 <option value="">Please select a grid size.</option>
+					 <option value="5">5x5</option>
+					 <option value="10">10x10</option>
+					 <option value="15">15x15</option>
+					 <option value="20">20x20</option>
+					 <option value="25">25x25</option>
+					 <option value="30">30x30</option>
+				</select>
+		  </form>
+
+		  <div id="nonogram_grid" name="nonogram_grid">
+				Test
+		  </div>
+	 </body>
+</html>
