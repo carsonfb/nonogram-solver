@@ -48,8 +48,10 @@ def find_options(length, filled, pattern='', empty=''):
             lines.append(line)
 
     if len(lines[0]) == length and pattern != '':
+        # A filled out pattern was passed in, check to see if the current possibility is valid.
         temp_lines = []
 
+        # Generate a bitmask from the pattern.
         mask = int(pattern, base=2)
 
         for line in lines:
@@ -59,8 +61,10 @@ def find_options(length, filled, pattern='', empty=''):
             lines = temp_lines
 
     if len(lines[0]) == length and empty != '':
+        # An empty position pattern was passed in, check to see if the current possibility is valid.
         temp_lines = []
 
+        # Generate a bitmask from the empty positions.
         mask = int(empty, base=2)
 
         for line in lines:
@@ -75,7 +79,7 @@ def find_options(length, filled, pattern='', empty=''):
 def find_overlap(length, patterns):
     """ This function finds the overlap between the current possibilities for a row or column. """
 
-    # Set the initial maks to everything set.  This handles up to a 32x32 grid.
+    # Set the initial masks to everything set.  This handles up to a 32x32 grid.
     overlap = 0xFFFFFFFF
 
     for pattern in patterns:
@@ -84,7 +88,7 @@ def find_overlap(length, patterns):
         overlap &= int(pattern, base=2)
 
     # Return the value as a bit pattern string.
-    return "{0:b}".format(overlap).zfill(length)
+    return '{0:b}'.format(overlap).zfill(length)
 
 def compare_existing(length, patterns, existing=''):
     """
@@ -103,7 +107,7 @@ def compare_existing(length, patterns, existing=''):
     pattern |= int(existing, base=2)
 
     # Return the value as a bit pattern string.
-    return "{0:b}".format(pattern).zfill(length)
+    return '{0:b}'.format(pattern).zfill(length)
 
 def update_existing(col_existing, row_existing):
     """
@@ -206,7 +210,7 @@ def solve(length, horizontal_grid, vertical_grid):
 
         passes += 1
 
-    print("Passes: %u\n\n" % passes)
+    print('Passes: %u\n\n' % passes)
 
     return horizontal_existing, horizontal_empty
 
@@ -268,12 +272,12 @@ def main():
 
     solved, empty = solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID)
 
-    print("SOLVED:\t\tEMPTY:")
+    print('SOLVED:\t\tEMPTY:')
 
     for index in range(LENGTH):
-        print(f"{solved[index]}\t{empty[index]}")
+        print(f'{solved[index]}\t{empty[index]}')
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
 
 # TODO: This may be able to be simplified with numpy.
