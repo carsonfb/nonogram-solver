@@ -6,7 +6,7 @@
 
 from itertools import groupby
 
-def find_options(length, filled, pattern=''):
+def find_options(length, filled, pattern='', empty=''):
     """ This function finds all possibilities for the starting condition of the rows or columns. """
 
     # TODO: Make a version of this for the empty hash as well.
@@ -58,6 +58,17 @@ def find_options(length, filled, pattern=''):
 
         for line in lines:
             if (int(line, base=2) & mask) == mask:
+                temp_lines.append(line)
+
+            lines = temp_lines
+
+    if len(lines[0]) == length and empty != '':
+        temp_lines = []
+
+        mask = int(empty, base=2)
+
+        for line in lines:
+            if (not int(line, base=2) & mask):
                 temp_lines.append(line)
 
             lines = temp_lines
@@ -230,17 +241,27 @@ def solve(length, horizontal_grid, vertical_grid):
     horizontal_backup = []
     vertical_backup = []
 
+    horizontal_empty = []
+    hempty_backup = []
+
+    vertical_empty = []
+    vempty_backup = []
+
     for row in horizontal_grid:
         # Find the initial patterns for each row.
         patterns = find_options(length, row)
+        empty = find_empty_2(length, patterns)
 
         horizontal_existing.append(find_overlap(length, patterns))
+        horizontal_empty.append(empty)
 
     for col in vertical_grid:
         # Find the initial patterns for each column.
         patterns = find_options(length, col)
+        empty = find_empty_2(length, patterns)
 
         vertical_existing.append(find_overlap(length, patterns))
+        vertical_empty.append(empty)
 
     passes = 0
     done = 0
@@ -252,22 +273,32 @@ def solve(length, horizontal_grid, vertical_grid):
         horizontal_backup = horizontal_existing[:]
         vertical_backup = vertical_existing[:]
 
+        hempty_backup = horizontal_empty[:]
+        vempty_backup = vertical_empty[:]
+
         vertical_existing, horizontal_existing \
             = update_existing(horizontal_existing, vertical_existing)
+
+        vertical_empty, horizontal_empty \
+            = update_existing(horizontal_empty, vertical_empty)
 
         # TODO: Also calculate possible patterns based on what has to be empty.
 
         for index in range(0, len(horizontal_grid)):
             # Find the initial patterns for each row.
-            patterns = find_options(length, horizontal_grid[index], horizontal_existing[index])
+            patterns = find_options(length, horizontal_grid[index], horizontal_existing[index], horizontal_empty[index])
+            empty = find_empty_2(length, patterns)
 
             horizontal_existing[index] = find_overlap(length, patterns)
+            horizontal_empty[index] = empty
 
         for index in range(0, len(vertical_grid)):
             # Find the initial patterns for each column.
-            patterns = find_options(length, vertical_grid[index], vertical_existing[index])
+            patterns = find_options(length, vertical_grid[index], vertical_existing[index], vertical_empty[index])
+            empty = find_empty_2(length, patterns)
 
             vertical_existing[index] = find_overlap(length, patterns)
+            vertical_empty[index] = empty
 
         # TODO: Check again, but this time taking empty into account.
 
@@ -278,14 +309,16 @@ def solve(length, horizontal_grid, vertical_grid):
 
     print("Passes: %u\n\n" % passes)
 
-    find_empty(horizontal_grid, horizontal_existing)
+    #find_empty(horizontal_grid, horizontal_existing)
     # TODO: Do the vertical grid also.
 
-    print("\n\n")
+    #print("\n\n")
 
-    return horizontal_existing
+    return horizontal_existing, horizontal_empty
 
-def find_empty_2(length, patterns):
+def find_empty_2(length, potential):
+    patterns = potential[:]
+
     mask = '1' * length
 
     for index, pattern in enumerate(patterns):
@@ -294,9 +327,9 @@ def find_empty_2(length, patterns):
 
     empty = find_overlap(length, patterns)
 
-    print(f"\n\nEMPTY:\n{overlap}\n\n")
+    #print(f"\n\nEMPTY:\n{empty}\n\n")
 
-    return overlap
+    return empty
 
 
 LENGTH = 15
@@ -339,19 +372,15 @@ VERTICAL_GRID = [
 
 # TODO: Need to determine what cannot be filled in as well.
 
-for solved in solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID):
-    print(solved)
+solved, empty = solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID)
 
+print("SOLVED:\t\tEMPTY:")
+
+for index in range(LENGTH):
+    print(f"{solved[index]}\t{empty[index]}")
 
 # TODO: vvv Incorporate this into the algorithm.  It finds empties better. vvv
 patterns = find_options(15, [3,1,3], pattern="001110000000000")
-
-print("\n\nPATTERNS:\n\n")
-
-for pattern in patterns:
-    print(pattern)
-
-print("\n")
 
 find_empty_2(LENGTH, patterns)
 # ^^^
