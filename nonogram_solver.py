@@ -4,12 +4,8 @@
     This program will solve nonogram puzzles for any x*x size with given starting conditions.
 """
 
-from itertools import groupby
-
 def find_options(length, filled, pattern='', empty=''):
     """ This function finds all possibilities for the starting condition of the rows or columns. """
-
-    # TODO: Make a version of this for the empty hash as well.
 
     total_empty = length - sum(filled)
     extra = total_empty - len(filled) + 1
@@ -68,7 +64,7 @@ def find_options(length, filled, pattern='', empty=''):
         mask = int(empty, base=2)
 
         for line in lines:
-            if (not int(line, base=2) & mask):
+            if not int(line, base=2) & mask:
                 temp_lines.append(line)
 
             lines = temp_lines
@@ -131,105 +127,6 @@ def update_existing(col_existing, row_existing):
 
     return row_existing, col_existing
 
-def find_empty(grid, existing, empty=None):
-    """ This function is a stub to find the locations that cannot be set. """
-
-    if not empty:
-        # Initialize the empty structure if it is not set.
-        empty = []
-
-        for row in range(0, len(grid)):
-            empty.append('0' * len(grid))
-
-    for index in range(0, len(existing)):
-        # Get the run lengths of 0s and 1s.
-        result = [(label, sum(1 for _ in group)) for label, group in groupby(existing[index])]
-
-        total_line = sum(grid[index])
-        total_filled = 0
-
-        for key, value in result:
-            if key == '1':
-                total_filled += value
-
-        if total_line == total_filled:
-            # All of the spaces to fill are filled in.  Everything else has to be empty.
-
-            for col in range(0, len(existing[index])):
-                # Set the values in empty to the opposite of their values in existing.
-                if existing[index][col] == '0':
-                    empty[index] = empty[index][:col] + '1' + empty[index][col+1:]
-                else:
-                    empty[index] = empty[index][:col] + '0' + empty[index][col+1:]
-        elif total_filled >= total_line / 2:
-            # Over half of the spots are filled in, so we can determine some of the empty spots.
-
-            # #3
-            print("%u of %u" % (total_filled, total_line))
-
-            left = total_line - total_filled
-
-            if len(grid[index]) == 1:
-                end = 0
-
-                for key, value in result:
-                    # TODO: Only works if there is one element in the grid.  This needs to be expanded.
-                    if key == '0':
-                        # This is only relevant for blanks, skip filled in ranges.
-                        if value > left:
-                            # If the number of potential blanks is higher than the number of actual
-                            # blanks, then fill the differenc in.
-                            start = len(existing[index]) - (value - left)
-
-                            if not end:
-                                # Start filling them in at the beginning.
-
-                                for pos in range(start, value - left):
-                                    # Set the calculated range to empty.
-                                    empty[index] = empty[index][:pos] + '1' + empty[index][index+1:]
-                            else:
-                                # Start filling them in from the ending.
-
-                                if start == len(existing[index]) - 1:
-                                    # Only the last space needs to be set.
-                                    empty[index] = empty[index][:start] + '1'
-                                else:
-                                    for pos in range(start, value - left):
-                                        # Set the calculated range to empty.
-                                        empty[index] \
-                                            = empty[index][:pos] \
-                                            + '1' \
-                                            + empty[index][index+1:]
-                                    
-                    end = 1
-
-            total_missing = total_line - total_filled
-
-            print("Existing: %s" % existing[index])
-            print("Total Missing: %u\n" % (total_line - total_filled))
-
-        # #3 is going to be difficult
-
-        # #4 is going to be very difficult
-
-    print("\n\nEMPTY")
-
-    for row in empty:
-        print("%s" % row)
-
-    print("\n\n")
-
-    # TODO #1: If only one value in grid, set all out-of-range values in empty.
-    #          (really just a special case of #2 and #3)
-
-    # TODO #2: If all 1s are accounted for, set all non-1s in existing to 1s in empty.
-
-    # TODO #3: If some squares cannot be filled in, then mark them as empty (like 8 of 11 of 15)
-
-    # TODO #4: If a complete value in existing, mark its borders in empty.
-
-    return empty
-
 def solve(length, horizontal_grid, vertical_grid):
     """
         This function will solve a nonogram given the length, horizontal_grid, and vertical_grid.
@@ -282,8 +179,6 @@ def solve(length, horizontal_grid, vertical_grid):
         vertical_empty, horizontal_empty \
             = update_existing(horizontal_empty, vertical_empty)
 
-        # TODO: Also calculate possible patterns based on what has to be empty.
-
         for index in range(0, len(horizontal_grid)):
             # Find the initial patterns for each row.
             patterns = find_options(length, horizontal_grid[index], horizontal_existing[index], horizontal_empty[index])
@@ -300,19 +195,12 @@ def solve(length, horizontal_grid, vertical_grid):
             vertical_existing[index] = find_overlap(length, patterns)
             vertical_empty[index] = empty
 
-        # TODO: Check again, but this time taking empty into account.
-
         if (horizontal_existing == horizontal_backup and vertical_existing == vertical_backup):
             done = 1
 
         passes += 1
 
     print("Passes: %u\n\n" % passes)
-
-    #find_empty(horizontal_grid, horizontal_existing)
-    # TODO: Do the vertical grid also.
-
-    #print("\n\n")
 
     return horizontal_existing, horizontal_empty
 
@@ -326,8 +214,6 @@ def find_empty_2(length, potential):
         patterns[index] = ''.join('1' if bit == '0' else '0' for bit in pattern)
 
     empty = find_overlap(length, patterns)
-
-    #print(f"\n\nEMPTY:\n{empty}\n\n")
 
     return empty
 
@@ -370,41 +256,12 @@ VERTICAL_GRID = [
     [5]
 ]
 
-# TODO: Need to determine what cannot be filled in as well.
-
 solved, empty = solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID)
 
 print("SOLVED:\t\tEMPTY:")
 
 for index in range(LENGTH):
     print(f"{solved[index]}\t{empty[index]}")
-
-# TODO: vvv Incorporate this into the algorithm.  It finds empties better. vvv
-patterns = find_options(15, [3,1,3], pattern="001110000000000")
-
-find_empty_2(LENGTH, patterns)
-# ^^^
-
-#patterns = find_options(LENGTH, HORIZONTAL_GRID[10])
-
-#print("\n\nInitial:\n--------")
-
-#for pattern in patterns:
-#    print(pattern)
-
-#patterns = find_options(LENGTH, HORIZONTAL_GRID[10], "001110000000000")
-
-#print("\n\nUpdated:\n--------")
-
-#for pattern in patterns:
-#    print(pattern)
-
-#overlap = find_overlap(LENGTH, patterns)
-
-#print("\n\nOverlap:\n--------\n%s\n\n" % overlap)
-
-# TODO: Do we need an existing for horizontal and vertical?  If not, then the calls to
-#       update_existing can be combined.
 
 # TODO: This may be able to be simplified with numpy.
 
