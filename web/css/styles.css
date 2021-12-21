@@ -1,0 +1,27 @@
+#nonogram_grid {
+	 padding-top: 20px;
+}
+
+#entry_row {
+	 height: 120px;
+	 margin: 0;
+	 padding: 0;
+}
+
+.entry_col {
+	 width: 20px;
+	 margin: 0;
+	 padding: 0;
+}
+
+.grid_col_entry {
+    transform: rotate(90deg);
+    white-space: nowrap;
+    bottom: 0;
+	 height: 20px;
+    width: 100px;
+	 margin: 0;
+	 margin-left: -40px;
+	 margin-right: -40px;
+	 padding: 0;
+}
