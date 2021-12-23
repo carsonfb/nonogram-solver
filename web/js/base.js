@@ -25,3 +25,6 @@ function display_grid(size) {
     document.getElementById("nonogram_grid").innerHTML = grid;
     document.getElementById("solve_button").style.visibility = "visible";
 }
+
+function submit_puzzle() {
+}
