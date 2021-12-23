@@ -1,4 +1,7 @@
 function display_grid(size) {
+	 // TODO: Move this grid to an HTML template and have the Python generate the page and pass it
+	 //       back to be filled into the inner HTML.
+
 	 var grid = "<form id='grid_form' name='grid_form'>";
 
 	 grid += "<table id='grid_table' name='grid_table'>";
@@ -15,7 +18,7 @@ function display_grid(size) {
 		  grid += "<td><input id='grid_row_entry_" + row + "' type='text' /></td>";
 
         for (let col = 0; col < size; col++) {
-				grid += "<td id='grid_cell_" + row + "_" + col + "'>0</td>";
+				grid += "<td class='grid_cell' id='grid_cell_" + row + "_" + col + "' onClick='toggle_cell(this);'> </td>";
         }
 		  grid += "</tr>";
     }
@@ -24,6 +27,15 @@ function display_grid(size) {
 
     document.getElementById("nonogram_grid").innerHTML = grid;
     document.getElementById("solve_button").style.visibility = "visible";
+}
+
+function toggle_cell(cell) {
+	 if (window.getComputedStyle(cell, "").backgroundColor == "rgb(255, 255, 255)") {
+		  cell.style.backgroundColor = "#000000";
+	 }
+	 else {
+		  cell.style.backgroundColor = "#FFFFFF";
+	 }
 }
 
 function submit_puzzle() {
