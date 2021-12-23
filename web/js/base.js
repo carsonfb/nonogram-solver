@@ -54,9 +54,23 @@ function submit_puzzle() {
 		  if (row_val) {
             row_val.split(",").forEach(val => horizontal[row].push(parseInt(val)));
 		  }
-    }
 
-	 alert(horizontal);
+		  solved[row] = [];
+
+		  for (col = 0; col < size; col++) {
+				// Fill out the solved array.
+
+				var cell = document.getElementById("grid_cell_" + row + "_" + col);
+	         var cell_val = window.getComputedStyle(cell, "").backgroundColor;
+
+				if (cell_val == "rgb(255, 255, 255)") {
+					 solved[row].push(0);
+				}
+				else {
+					 solved[row].push(1);
+				}
+		  }
+    }
 
     for (col = 0; col < size; col++) {
         var col_val = document.getElementById("grid_col_entry_" + col).value;
@@ -67,4 +81,8 @@ function submit_puzzle() {
             col_val.split(",").forEach(val => vertical[col].push(parseInt(val)));
 		  }
     }
+
+	 var solved, empty = pywebview.api.solve(parseInt(size), horizontal, vertical);
+
+	 alert(solved);
 }
