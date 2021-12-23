@@ -23,4 +23,5 @@ function display_grid(size) {
 	 grid += "</form></table>";
 
     document.getElementById("nonogram_grid").innerHTML = grid;
+    document.getElementById("solve_button").style.visibility = "visible";
 }

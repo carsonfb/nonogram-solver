@@ -25,3 +25,7 @@
 	 margin-right: -40px;
 	 padding: 0;
 }
+
+#solve_button {
+	 visibility: hidden;
+}
