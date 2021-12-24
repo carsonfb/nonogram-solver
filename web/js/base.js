@@ -2,7 +2,7 @@ function display_grid(size) {
     // TODO: Move this grid to an HTML template and have the Python generate the page and pass it
     //       back to be filled into the inner HTML.
 
-    var grid = "<form id='grid_form' name='grid_form'>";
+    let grid = "<form id='grid_form' name='grid_form'>";
 
     grid += "<table id='grid_table' name='grid_table'>";
     grid += "<tr id='entry_row'><td />";
@@ -46,8 +46,8 @@ function submit_puzzle() {
 
     var size = document.getElementById("size_entry").value;
 
-    for (row = 0; row < size; row++) {
-        var row_val = document.getElementById("grid_row_entry_" + row).value;
+    for (let row = 0; row < size; row++) {
+        let row_val = document.getElementById("grid_row_entry_" + row).value;
 
 		  horizontal[row] = [];
 
@@ -57,11 +57,11 @@ function submit_puzzle() {
 
 		  solved[row] = [];
 
-		  for (col = 0; col < size; col++) {
+		  for (let col = 0; col < size; col++) {
 				// Fill out the solved array.
 
-				var cell = document.getElementById("grid_cell_" + row + "_" + col);
-	         var cell_val = window.getComputedStyle(cell, "").backgroundColor;
+				let cell = document.getElementById("grid_cell_" + row + "_" + col);
+	         let cell_val = window.getComputedStyle(cell, "").backgroundColor;
 
 				if (cell_val == "rgb(255, 255, 255)") {
 					 solved[row].push(0);
@@ -72,8 +72,8 @@ function submit_puzzle() {
 		  }
     }
 
-    for (col = 0; col < size; col++) {
-        var col_val = document.getElementById("grid_col_entry_" + col).value;
+    for (let col = 0; col < size; col++) {
+        let col_val = document.getElementById("grid_col_entry_" + col).value;
 
 		  vertical[col] = [];
 
@@ -82,7 +82,26 @@ function submit_puzzle() {
 		  }
     }
 
-	 var solved, empty = pywebview.api.solve(parseInt(size), horizontal, vertical);
+	 // TODO: The Python solver does not accept a partially filled out grid yet.
+	 pywebview.api.solve(parseInt(size), horizontal, vertical).then(solved_callback);
 
-	 alert(solved);
+	 // TODO: Display the number of passes to the user.
+}
+
+function solved_callback(response) {
+	 solved = response[0];
+	 empty = response[1];
+
+	 for (let row = 0; row < solved.length; row++) {
+		  for (let col = 0; col < solved.length; col++) {
+				let cell = document.getElementById("grid_cell_" + row + "_" + col);
+
+		      if (solved[row][col] == 1) {
+					 cell.style.backgroundColor = "#000000";
+		      }
+		      else {
+		          cell.style.backgroundColor = "#FFFFFF";
+		      }
+		  }
+	 }
 }
