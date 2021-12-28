@@ -40,68 +40,66 @@ function toggle_cell(cell) {
 }
 
 function submit_puzzle() {
-    var horizontal = [];
-    var vertical = [];
-    var solved = [];
+    let horizontal = [];
+    let vertical = [];
+    let solved = [];
 
-    var size = document.getElementById("size_entry").value;
+    const size = document.getElementById("size_entry").value;
 
     for (let row = 0; row < size; row++) {
         let row_val = document.getElementById("grid_row_entry_" + row).value;
 
-		  horizontal[row] = [];
+        horizontal[row] = [];
 
-		  if (row_val) {
+        if (row_val) {
             row_val.split(",").forEach(val => horizontal[row].push(parseInt(val)));
-		  }
+        }
 
-		  solved[row] = [];
+        solved[row] = [];
 
-		  for (let col = 0; col < size; col++) {
-				// Fill out the solved array.
+        for (let col = 0; col < size; col++) {
+            // Fill out the solved array.
 
-				let cell = document.getElementById("grid_cell_" + row + "_" + col);
-	         let cell_val = window.getComputedStyle(cell, "").backgroundColor;
+            let cell = document.getElementById("grid_cell_" + row + "_" + col);
+            let cell_val = window.getComputedStyle(cell, "").backgroundColor;
 
-				if (cell_val == "rgb(255, 255, 255)") {
-					 solved[row].push(0);
-				}
-				else {
-					 solved[row].push(1);
-				}
-		  }
+            if (cell_val == "rgb(255, 255, 255)") {
+                solved[row].push(0);
+            }
+            else {
+                solved[row].push(1);
+            }
+        }
     }
 
     for (let col = 0; col < size; col++) {
         let col_val = document.getElementById("grid_col_entry_" + col).value;
 
-		  vertical[col] = [];
+        vertical[col] = [];
 
-		  if (col_val) {
+        if (col_val) {
             col_val.split(",").forEach(val => vertical[col].push(parseInt(val)));
-		  }
+        }
     }
 
-	 // TODO: The Python solver does not accept a partially filled out grid yet.
-	 pywebview.api.solve(parseInt(size), horizontal, vertical).then(solved_callback);
-
-	 // TODO: Display the number of passes to the user.
+    // TODO: The Python solver does not accept a partially filled out grid yet.
+    pywebview.api.solve(parseInt(size), horizontal, vertical).then(solved_callback);
 }
 
 function solved_callback(response) {
-	 solved = response[0];
-	 empty = response[1];
+    solved = response[0];
+    empty = response[1];
 
-	 for (let row = 0; row < solved.length; row++) {
-		  for (let col = 0; col < solved.length; col++) {
-				let cell = document.getElementById("grid_cell_" + row + "_" + col);
+    for (let row = 0; row < solved.length; row++) {
+        for (let col = 0; col < solved.length; col++) {
+            let cell = document.getElementById("grid_cell_" + row + "_" + col);
 
-		      if (solved[row][col] == 1) {
-					 cell.style.backgroundColor = "#000000";
-		      }
-		      else {
-		          cell.style.backgroundColor = "#FFFFFF";
-		      }
-		  }
-	 }
+            if (solved[row][col] == 1) {
+                cell.style.backgroundColor = "#000000";
+            }
+            else {
+                cell.style.backgroundColor = "#FFFFFF";
+            }
+        }
+    }
 }
