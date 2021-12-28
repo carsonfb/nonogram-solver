@@ -129,14 +129,23 @@ def update_existing(col_existing, row_existing):
 def solve(length, horizontal_grid, vertical_grid):
     """
         This function will solve a nonogram given the length, horizontal_grid, and vertical_grid.
+
+        Currently, passing in a partially solved puzzle is not supported.  The way nonograms are
+        setup, it should never be required to have a partially solved puzzle to beging with unlike,
+        for instance, sudokos.
     """
 
+    # Initialize the existing tables.
     horizontal_existing = []
     vertical_existing = []
 
+    # Initialize the backup tables.  These are used to compare with the current values in order to
+    # see if the script has finished.  This is done instead of checking that every row and column
+    # is correct because, if there is a bug or data entry issue, this could cause and endless loop.
     horizontal_backup = []
     vertical_backup = []
 
+    # Initialize the empty tables.
     horizontal_empty = []
     vertical_empty = []
 
@@ -144,6 +153,7 @@ def solve(length, horizontal_grid, vertical_grid):
         # Find the initial patterns for each row.
         patterns = find_options(length, row)
 
+        # Find the initial filled out and empty values for each row.
         horizontal_existing.append(find_overlap(length, patterns))
         horizontal_empty.append(find_empty(length, patterns))
 
@@ -151,9 +161,11 @@ def solve(length, horizontal_grid, vertical_grid):
         # Find the initial patterns for each column.
         patterns = find_options(length, col)
 
+        # Find the initial filled out and empty values for each column.
         vertical_existing.append(find_overlap(length, patterns))
         vertical_empty.append(find_empty(length, patterns))
 
+    # Initialize the done flag as well as the number of passes needed to solve the puzzle.
     passes = 0
     done = 0
 
@@ -164,9 +176,11 @@ def solve(length, horizontal_grid, vertical_grid):
         horizontal_backup = horizontal_existing[:]
         vertical_backup = vertical_existing[:]
 
+        # Update the existing tables based on their counterpart table.
         vertical_existing, horizontal_existing \
             = update_existing(horizontal_existing, vertical_existing)
 
+        # Update the empty tables based on their counterpart table.
         vertical_empty, horizontal_empty \
             = update_existing(horizontal_empty, vertical_empty)
 
@@ -201,6 +215,8 @@ def solve(length, horizontal_grid, vertical_grid):
             vertical_empty[index] = find_empty(length, patterns)
 
         if (horizontal_existing == horizontal_backup and vertical_existing == vertical_backup):
+            # Nothing changed on this last pass.  Set the flag to done so we do not end up in
+            # and infinite loop.
             done = 1
 
         passes += 1
@@ -212,6 +228,7 @@ def solve(length, horizontal_grid, vertical_grid):
 def find_empty(length, potential):
     """ This function finds the empty positions based of the potential fill positions. """
 
+    # Make a copy of the potential patterns.
     patterns = potential[:]
 
     for index, pattern in enumerate(patterns):
@@ -260,7 +277,6 @@ class TestCases(unittest.TestCase):
         ]
 
         correct = "000000000000000"
-
         result = find_overlap(length, patterns)
 
         self.assertEqual(result, correct)

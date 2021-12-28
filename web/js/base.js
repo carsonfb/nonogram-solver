@@ -82,7 +82,9 @@ function submit_puzzle() {
         }
     }
 
-    // TODO: The Python solver does not accept a partially filled out grid yet.
+    /* Currently, passing in a partially solved puzzle is not supported.  The way nonograms are
+       setup, it should never be required to have a partially solved puzzle to beging with unlike,
+       for instance, sudokos. */
     pywebview.api.solve(parseInt(size), horizontal, vertical).then(solved_callback);
 }
 
