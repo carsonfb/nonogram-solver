@@ -104,25 +104,6 @@ def find_overlap(length, patterns):
     # Return the value as a bit pattern string.
     return '{0:b}'.format(overlap).zfill(length)
 
-def compare_existing(length, patterns, existing=''):
-    """
-        This function adds information from a partially user-solved row or column to the
-        computer-generated row or column.
-    """
-
-    if existing == '':
-        # Set the default to a completely unset bit pattern string.
-        existing = '0' * length
-
-    # Lookup the overlap value.
-    pattern = int(find_overlap(length, patterns), base=2)
-
-    # Merge the overlap value and the already existing value.
-    pattern |= int(existing, base=2)
-
-    # Return the value as a bit pattern string.
-    return '{0:b}'.format(pattern).zfill(length)
-
 def update_existing(col_existing, row_existing):
     """
         This function updates the rows based on the columns and vice-versa.  It basically rotates
