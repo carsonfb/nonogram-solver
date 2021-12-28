@@ -7,6 +7,18 @@ leave blank.
 
 For more information, please see this Wikipedia article <https://en.wikipedia.org/wiki/Nonogram>.
 
+Installation
+------------
+1. Ensure that you have Python installed.  This was developed under version 3.8.10, but many other
+versions of 3 should also work.  Additionally, there should not need to be many changes to get it
+to work under Python 2.x if, for some reason, that is all you have available to you.
+
+2. Clone the repository onto your computer.
+
+3. Optional, but recommended:  Setup a virtual environment for the project.
+
+4. Install the dependencies with *pip install -r requirements.txt*.
+
 
 Credits
 -------
