@@ -32,10 +32,7 @@ Bitcoin wallet: 3QzgUdXzbLY7oy15XeMJ4W37cfBJDeKj6A
 
 Webull affiliate link: https://a.webull.com/8XVE5sOKtu1sPAStxw
 
-RobinHood affiliate link:
-
-
-
+Robinhood affiliate link: join.robinhood.com/carsonb453
 
 Credits
 -------
