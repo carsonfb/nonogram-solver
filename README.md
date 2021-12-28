@@ -1,8 +1,16 @@
 Nonogram Solver
 ===============
 
+This program solves nonogram puzzles.  Nonograms are a type of logic puzzle wherein a list of
+numbers are give for each row and column signifying which cells of a grid to fill in and which to
+leave blank.
+
+For more information, please see this Wikipedia article <https://en.wikipedia.org/wiki/Nonogram>.
+
+
 Credits
 -------
+© 2021 Carson F. Ball
 
 License
 -------
@@ -19,8 +27,6 @@ you clearly indicate that you have made modifications.
 
 3. You do not release this code commercially.
 
-`Plain text of the license <https://creativecommons.org/licenses/by-nc/4.0/>
+Plain text of the license <https://creativecommons.org/licenses/by-nc/4.0/>
 
-`Full legalese of the license <https://creativecommons.org/licenses/by-nc/4.0/legalcode>
-
-
+Full legalese of the license <https://creativecommons.org/licenses/by-nc/4.0/legalcode>
