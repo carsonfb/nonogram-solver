@@ -388,53 +388,93 @@ class TestCases(unittest.TestCase):
         self.assertTrue(horizontal_new == horizontal_after)
         self.assertTrue(vertical_new == vertical_after)
 
-LENGTH = 15
+    def test_solve(self):
+        """
+            This method verifies that the function to solve the nonogram is functioning properly.
+            It tests uses a known solvable, relatively complex, nonogram found in the wild.
+        """
 
-HORIZONTAL_GRID = [
-    [3, 2],
-    [1, 4, 1],
-    [2],
-    [1, 2],
-    [1, 5],
-    [2, 7],
-    [11],
-    [5, 2],
-    [4, 5],
-    [3, 2, 1],
-    [3, 1, 3],
-    [2, 3, 3],
-    [2, 3, 3],
-    [1, 2, 2, 2],
-    [5, 4]
-]
+        length = 15
 
-VERTICAL_GRID = [
-    [2, 2],
-    [1, 1, 3],
-    [2, 2, 5, 1],
-    [1, 1, 9],
-    [1, 5, 3, 1],
-    [1, 5, 1],
-    [1, 5, 2],
-    [3, 2, 3],
-    [2, 2],
-    [2, 6],
-    [2, 2, 2],
-    [1, 1, 1],
-    [3, 5],
-    [2, 4],
-    [5]
-]
+        horizontal_grid = [
+            [3, 2],
+            [1, 4, 1],
+            [2],
+            [1, 2],
+            [1, 5],
+            [2, 7],
+            [11],
+            [5, 2],
+            [4, 5],
+            [3, 2, 1],
+            [3, 1, 3],
+            [2, 3, 3],
+            [2, 3, 3],
+            [1, 2, 2, 2],
+            [5, 4]
+        ]
+
+        vertical_grid = [
+            [2, 2],
+            [1, 1, 3],
+            [2, 2, 5, 1],
+            [1, 1, 9],
+            [1, 5, 3, 1],
+            [1, 5, 1],
+            [1, 5, 2],
+            [3, 2, 3],
+            [2, 2],
+            [2, 6],
+            [2, 2, 2],
+            [1, 1, 1],
+            [3, 5],
+            [2, 4],
+            [5]
+        ]
+
+        correct_solved = [
+            "111000110000000",
+            "101111010000000",
+            "000000110000000",
+            "001001100000000",
+            "101111100000000",
+            "110011111110000",
+            "001111111111100",
+            "011111000000110",
+            "011110000011111",
+            "011100000110001",
+            "001110000100111",
+            "000110011100111",
+            "000110011100111",
+            "000100110110110",
+            "001111100111100"
+        ]
+
+        correct_empty = [
+            "000111001111111",
+            "010000101111111",
+            "111111001111111",
+            "110110011111111",
+            "010000011111111",
+            "001100000001111",
+            "110000000000011",
+            "100000111111001",
+            "100001111100000",
+            "100011111001110",
+            "110001111011000",
+            "111001100011000",
+            "111001100011000",
+            "111011001001001",
+            "110000011000011"
+        ]
+
+        solved, empty = solve(length, horizontal_grid, vertical_grid)
+
+        self.assertEqual(solved, correct_solved)
+        self.assertEqual(empty, correct_empty)
 
 def main():
     """ This is the main function of the program. """
-
-    solved, empty = solve(LENGTH, HORIZONTAL_GRID, VERTICAL_GRID)
-
-    print('SOLVED:\t\tEMPTY:')
-
-    for index in range(LENGTH):
-        print(f'{solved[index]}\t{empty[index]}')
 
     window = webview.create_window("Nonogram Solver", "web/main.html")
 
