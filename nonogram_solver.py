@@ -2,9 +2,21 @@
 
 """
     This program will solve nonogram puzzles for any x*x size with given starting conditions.
+
+    Some of this could likely be simplified and sped up by using NumPy.  However, I am trying to
+    limit the number of requirements to make this easier to get up and running for people new to
+    Python.  Also, this solves the nonograms that I tested with instantly and, as Donald Knuth said,
+    "premature optimization is the root of all evil."
+
+    Also, the tables could be stored internally as bit patterns to cut down on size as well as
+    time from converting them back and forth.  As mentioned above though, this already runs fast
+    enough and, at max, it supports 32x32 grids.  This would mean, at the largest, each table only
+    needs to be 1K plus overhead per table.  Cutting this down to 128B plus overhead per table isn't
+    really going to be noticeable on a modern system with GBs of RAM.
 """
 
 import webview
+import unittest
 
 def find_options(length, filled, pattern='', empty=''):
     """ This function finds all possibilities for the starting condition of the rows or columns. """
@@ -152,14 +164,14 @@ def solve(length, horizontal_grid, vertical_grid):
         patterns = find_options(length, row)
 
         horizontal_existing.append(find_overlap(length, patterns))
-        horizontal_empty.append(find_empty_2(length, patterns))
+        horizontal_empty.append(find_empty(length, patterns))
 
     for col in vertical_grid:
         # Find the initial patterns for each column.
         patterns = find_options(length, col)
 
         vertical_existing.append(find_overlap(length, patterns))
-        vertical_empty.append(find_empty_2(length, patterns))
+        vertical_empty.append(find_empty(length, patterns))
 
     passes = 0
     done = 0
@@ -190,7 +202,7 @@ def solve(length, horizontal_grid, vertical_grid):
             horizontal_existing[index] = find_overlap(length, patterns)
 
             # Find the empty positions for the available patterns.
-            horizontal_empty[index] = find_empty_2(length, patterns)
+            horizontal_empty[index] = find_empty(length, patterns)
 
         for index in range(0, len(vertical_grid)):
             # Find the current patterns for each column.
@@ -205,7 +217,7 @@ def solve(length, horizontal_grid, vertical_grid):
             vertical_existing[index] = find_overlap(length, patterns)
 
             # Find the empty positions for the available patterns.
-            vertical_empty[index] = find_empty_2(length, patterns)
+            vertical_empty[index] = find_empty(length, patterns)
 
         if (horizontal_existing == horizontal_backup and vertical_existing == vertical_backup):
             done = 1
@@ -216,7 +228,7 @@ def solve(length, horizontal_grid, vertical_grid):
 
     return horizontal_existing, horizontal_empty
 
-def find_empty_2(length, potential):
+def find_empty(length, potential):
     """ This function finds the empty positions based of the potential fill positions. """
 
     patterns = potential[:]
@@ -230,6 +242,23 @@ def find_empty_2(length, potential):
 
     return empty
 
+
+class TestCases(unittest.TestCase):
+    """ This class contains the unit tests for the nonogram solver's functions. """
+
+    def test_find_empty(self):
+        """
+            This method verifies that the function to find the empty pattern for a row returns the
+            correct value.
+        """
+
+        length = 5
+        potential = ["001111100111100"]
+        correct = "110000011000011"
+
+        empty = find_empty(length, potential)
+
+        self.assertEqual(empty, correct)
 
 LENGTH = 15
 
@@ -285,9 +314,10 @@ def main():
 
     webview.start(http_server=True)
 
-
 if __name__ == '__main__':
-    main()
+    tests = unittest.main(exit=False)
 
-
-# TODO: This may be able to be simplified with numpy.
+    if tests.result.wasSuccessful() == True:
+        main()
+    else:
+        print("Exiting because tests failed.")
