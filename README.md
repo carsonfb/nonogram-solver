@@ -19,8 +19,8 @@ you clearly indicate that you have made modifications.
 
 3. You do not release this code commercially.
 
-`Plain text of the license <https://creativecommons.org/licenses/by-nc/4.0/>`_
+`Plain text of the license <https://creativecommons.org/licenses/by-nc/4.0/>
 
-`Full legalese of the license <https://creativecommons.org/licenses/by-nc/4.0/legalcode>`_
+`Full legalese of the license <https://creativecommons.org/licenses/by-nc/4.0/legalcode>
 
 
