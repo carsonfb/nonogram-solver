@@ -15,8 +15,8 @@
     really going to be noticeable on a modern system with GBs of RAM.
 """
 
-import webview
 import unittest
+import webview
 
 def find_options(length, filled, pattern='', empty=''):
     """ This function finds all possibilities for the starting condition of the rows or columns. """
@@ -246,6 +246,70 @@ def find_empty(length, potential):
 class TestCases(unittest.TestCase):
     """ This class contains the unit tests for the nonogram solver's functions. """
 
+    def test_find_overlap(self):
+        """
+            This method verifies that the function to generate the overlap is functioning
+            correctly.
+        """
+
+        length = 15
+
+        patterns = [
+            "111110111100000",
+            "111110011110000",
+            "111110001111000",
+            "111110000111100",
+            "111110000011110",
+            "111110000001111",
+            "011111011110000",
+            "011111001111000",
+            "011111000111100",
+            "011111000011110",
+            "011111000001111",
+            "001111101111000",
+            "001111100111100",
+            "001111100011110",
+            "001111100001111",
+            "000111110111100",
+            "000111110011110",
+            "000111110001111",
+            "000011111011110",
+            "000011111001111",
+            "000001111101111"
+        ]
+
+        correct = "000000000000000"
+
+        result = find_overlap(length, patterns)
+
+        self.assertEqual(result, correct)
+
+        patterns = [
+            "111110111100000",
+            "111110011110000",
+            "111110001111000",
+            "111110000111100",
+            "111110000011110",
+            "111110000001111",
+            "011111011110000",
+            "011111001111000",
+            "011111000111100",
+            "011111000011110",
+            "011111000001111",
+            "001111101111000",
+            "001111100111100",
+            "001111100011110",
+            "001111100001111",
+            "000111110111100",
+            "000111110011110",
+            "000111110001111"
+        ]
+
+        correct = "000110000000000"
+        result = find_overlap(length, patterns)
+
+        self.assertEqual(result, correct)
+
     def test_find_empty(self):
         """
             This method verifies that the function to find the empty pattern for a row returns the
@@ -259,6 +323,89 @@ class TestCases(unittest.TestCase):
         empty = find_empty(length, potential)
 
         self.assertEqual(empty, correct)
+
+    def test_update_existing(self):
+        """
+            This method verifies that the function to update the horizontal hash based on the data
+            in the vertical hash and vice-versa returns the correctly updated hashes.
+        """
+
+        horizontal_before = [
+            "001000000000000",
+            "001000010000000",
+            "000000010000000",
+            "001000000000000",
+            "101111100000000",
+            "110011111100000",
+            "001111111111000",
+            "001110000000000",
+            "001100000011100",
+            "001100000100000",
+            "001110000100111",
+            "000110000000111",
+            "000100010000000",
+            "000000010000000",
+            "000110000100000"
+        ]
+
+        vertical_before = [
+            "000011000000000",
+            "000001000000000",
+            "110110111110000",
+            "000010111111100",
+            "000011110011000",
+            "000011100000000",
+            "000011100000000",
+            "011001100000110",
+            "000001100000000",
+            "000001100110000",
+            "000000100000000",
+            "000000000000000",
+            "000000000011000",
+            "000000000011000",
+            "000000000011000"
+        ]
+
+        horizontal_after = [
+            "001000000000000",
+            "001000010000000",
+            "000000010000000",
+            "001000000000000",
+            "101111100000000",
+            "110011111100000",
+            "001111111111000",
+            "001110000000000",
+            "001100000011100",
+            "001100000100000",
+            "001110000100111",
+            "000110000000111",
+            "000100010000000",
+            "000000010000000",
+            "000110000100000"
+        ]
+
+        vertical_after = [
+            "000011000000000",
+            "000001000000000",
+            "110110111110000",
+            "000010111111101",
+            "000011110011001",
+            "000011100000000",
+            "000011100000000",
+            "011001100000110",
+            "000001100000000",
+            "000001100110001",
+            "000000101000000",
+            "000000101000000",
+            "000000001011000",
+            "000000000011000",
+            "000000000011000"
+        ]
+
+        vertical_new, horizontal_new = update_existing(horizontal_before, vertical_before)
+
+        self.assertTrue(horizontal_new == horizontal_after)
+        self.assertTrue(vertical_new == vertical_after)
 
 LENGTH = 15
 
@@ -315,9 +462,9 @@ def main():
     webview.start(http_server=True)
 
 if __name__ == '__main__':
-    tests = unittest.main(exit=False)
+    TESTS = unittest.main(exit=False)
 
-    if tests.result.wasSuccessful() == True:
+    if TESTS.result.wasSuccessful():
         main()
     else:
         print("Exiting because tests failed.")
