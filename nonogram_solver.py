@@ -500,6 +500,8 @@ class TestCases(unittest.TestCase):
 
         solved, empty, _ = solve(length, horizontal_grid, vertical_grid)
 
+        # The passes retuned value is not being checked as this could change if the underlying
+        # algorithm changes.
         self.assertEqual(solved, correct_solved)
         self.assertEqual(empty, correct_empty)
 
