@@ -13,6 +13,22 @@
     enough and, at max, it supports 32x32 grids.  This would mean, at the largest, each table only
     needs to be 1K plus overhead per table.  Cutting this down to 128B plus overhead per table isn't
     really going to be noticeable on a modern system with GBs of RAM.
+
+    The horizontal and vertical tables could be combined into one and rotated.  This would save
+    memory (maybe a couple of K) but, IMHO, would make the code more complex.  The impact on the
+    speed would not be noticeable and neither would the impact on memory consumption in any
+    significant way.  So, for the sake of readability, I left it using two copies of each grid.
+
+    There are likely much better algorithms that what has been implemented here. I mostly wrote this
+    as a proof-of-concept and actively avoided looking up solving algorithms to see if I could
+    write a solution unassisted.
+
+    The front-end allows users to fill in some of the cells but - at the moment - doesn't do
+    anything with them.  The original intent was to pass these in to the solve function as starting
+    information.  However, nonograms - by their nature - do not need hints outside of the numbers
+    for each row and column.  Being able to turn some of the cells on though is still useful for
+    checking progress against a solution.  For instance, by filling in cells when there is an
+    obvious error and then clicking solve, the incorrect cell(s) will be turned back off.
 """
 
 import unittest
