@@ -55,10 +55,6 @@ function submit_puzzle() {
     let horizontal = [];
     let vertical = [];
 
-    // TODO: Ensure that the entered numbers are not larger than the grid size.
-    // TODO: Check that the value is not negative.
-    // TODO: Check that the values are all numbers.
-
     // Get the size of the grid.
     const size = document.getElementById("size_entry").value;
 
