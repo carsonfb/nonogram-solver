@@ -40,7 +40,6 @@ def find_options(length, filled, pattern='', empty=''):
     total_empty = length - sum(filled)
     extra = total_empty - len(filled) + 1
     lines = []
-    ones = filled[0]
 
     for pad in range(0, extra + 1):
         # Loop over each possible set of padding.
@@ -51,7 +50,7 @@ def find_options(length, filled, pattern='', empty=''):
 
         # Set the first value of the sub-string.
         line += '0' * pad
-        line += '1' * ones
+        line += '1' * filled[0]
 
         # Subtract from the number of dividers left.
         blanks -= 1
