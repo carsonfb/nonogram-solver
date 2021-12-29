@@ -142,12 +142,11 @@ function submit_puzzle() {
     }
 
     for (let col = 0; col < size; col++) {
+        // Get the user-entered values for the column.
         let col_val = document.getElementById("grid_col_entry_" + col).value;
 
         // Initialize the column data.
         vertical[col] = [];
-
-        let col_size = 0;
 
         if (col_val) {
             if (verify(size, col_val)) {
@@ -167,18 +166,19 @@ function submit_puzzle() {
         }
     }
 
-    /* Currently, passing in a partially solved puzzle is not supported.  The way nonograms are
-       setup, it should never be required to have a partially solved puzzle to beging with unlike,
-       for instance, sudokos.
-    */
-
     if (!error) {
+        /* Currently, passing in a partially solved puzzle is not supported.  The way nonograms are
+           setup, it should never be required to have a partially solved puzzle to beging with
+           unlike, for instance, sudokos.
+        */
+
         pywebview.api.solve(parseInt(size), horizontal, vertical).then(solved_callback);
     }
     else {
-        // Invert the colors for the entry boxes with invalid values.  This inverts the color
-        // instead of setting the border to red, for instance, so that color-blind people are also
-        // able to see the alerts.
+        /* Invert the colors for the entry boxes with invalid values.  This inverts the color
+           instead of setting the border to red, for instance, so that color-blind people are also
+           able to see the alerts.
+        */
         update_errors(error_rows, error_cols);
 
         alert("Please ensure that the entered values are all numeric and that they are not" +
@@ -232,8 +232,10 @@ function solved_callback(response) {
     empty = response[1];
     passes = response[2];
 
-    let passes_div = document.getElementById("passes_div");
+    // Get the element for the user display for the number of passes.
+    let passes_span = document.getElementById("passes_span");
 
+    // Update the dipslay for the passes and make it visible to the user.
     passes_span.innerHTML = "Passes: " + passes;
     passes_span.style.visibility = "visible";
 
