@@ -167,17 +167,21 @@ function solved_callback(response) {
        solution returned from the back-end.
     */
 
+    // Store the returned values in scalars.
     solved = response[0];
     empty = response[1];
 
     for (let row = 0; row < solved.length; row++) {
         for (let col = 0; col < solved.length; col++) {
+            // Get the current cell element.
             let cell = document.getElementById("grid_cell_" + row + "_" + col);
 
             if (solved[row][col] == 1) {
+                // If the cell is part of the solution, fill it in with black.
                 cell.style.backgroundColor = "#000000";
             }
             else {
+                // If the cell is not part of the solution, clear it with white.
                 cell.style.backgroundColor = "#FFFFFF";
             }
         }
