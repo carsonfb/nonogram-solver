@@ -237,9 +237,7 @@ def solve(length, horizontal_grid, vertical_grid):
 
         passes += 1
 
-    print('Passes: %u\n\n' % passes)
-
-    return horizontal_existing, horizontal_empty
+    return horizontal_existing, horizontal_empty, passes
 
 def find_empty(length, potential):
     """ This function finds the empty positions based of the potential fill positions. """
@@ -500,7 +498,7 @@ class TestCases(unittest.TestCase):
             "110000011000011"
         ]
 
-        solved, empty = solve(length, horizontal_grid, vertical_grid)
+        solved, empty, passes = solve(length, horizontal_grid, vertical_grid)
 
         self.assertEqual(solved, correct_solved)
         self.assertEqual(empty, correct_empty)

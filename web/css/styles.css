@@ -34,3 +34,7 @@
 #solve_button {
     visibility: hidden;
 }
+
+#passes_span {
+    visibility: hidden;
+}

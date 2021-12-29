@@ -166,6 +166,12 @@ function solved_callback(response) {
     // Store the returned values in scalars.
     solved = response[0];
     empty = response[1];
+    passes = response[2];
+
+    let passes_div = document.getElementById("passes_div");
+
+    passes_span.innerHTML = "Passes: " + passes;
+    passes_span.style.visibility = "visible";
 
     for (let row = 0; row < solved.length; row++) {
         for (let col = 0; col < solved.length; col++) {
