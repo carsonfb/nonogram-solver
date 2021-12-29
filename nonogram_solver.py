@@ -31,6 +31,7 @@
     obvious error and then clicking solve, the incorrect cell(s) will be turned back off.
 """
 
+import os
 import unittest
 import webview
 
@@ -506,10 +507,19 @@ def main():
     """ This is the main function of the program. """
 
     window = webview.create_window("Nonogram Solver", "web/main.html")
-
     window.expose(solve)
 
-    webview.start(http_server=True)
+    os_type = os.name
+
+    if os_type == "posix":
+        # POSIX works properly with the default rendering engine.
+        webview.start(http_server=True)
+    elif os_type == "nt":
+        # Edge does not currently work properly with local files so fallback on CEF.
+        webview.start(gui="cef", http_server=True)
+    else:
+        # Unknown system.  Assume that it works properly with the default rendering engine.
+        webview.start(http_server=True)
 
 if __name__ == '__main__':
     TESTS = unittest.main(exit=False)
