@@ -48,6 +48,54 @@ function toggle_cell(cell) {
     }
 }
 
+function clear_errors(size) {
+    /* This function clears the error notifications. */
+
+    for (let row = 0; row < size; row++) {
+        // Get the element for the current row.
+        row_elem = document.getElementById("grid_row_entry_" + row);
+
+        // Change the foreground to black and the background to white.
+        row_elem.style.background = "#FFFFFF";
+        row_elem.style.color = "#000000";
+    }
+
+    for (let col = 0; col < size; col++) {
+        // Get the element for the current column.
+        col_elem = document.getElementById("grid_col_entry_" + col);
+
+        // Change the foreground to black and the background to white.
+        col_elem.style.background = "#FFFFFF";
+        col_elem.style.color = "#000000";
+    }
+}
+
+function update_errors(error_rows, error_cols) {
+    /* This function inverts the color of problematic row and column entries. */
+
+    if (error_rows.length) {
+        for (const row of error_rows) {
+            // Get the element for the current row.
+            row_elem = document.getElementById("grid_row_entry_" + row);
+
+            // Change the foreground to white and the background to black (e.g. inverse).
+            row_elem.style.background = "#000000";
+            row_elem.style.color = "#FFFFFF";
+        }
+    }
+
+    if (error_cols.length) {
+        for (const col of error_cols) {
+            // Get the element for the current column.
+            col_elem = document.getElementById("grid_col_entry_" + col);
+
+            // Change the foreground to white and the background to black (e.g. inverse).
+            col_elem.style.background = "#000000";
+            col_elem.style.color = "#FFFFFF";
+        }
+    }
+}
+
 function submit_puzzle() {
     /* This function submits the filled out puzzle to the back-end to be solved. */
 
@@ -55,8 +103,15 @@ function submit_puzzle() {
     let horizontal = [];
     let vertical = [];
 
+    // Setup the error tracking.
+    let error_rows = [];
+    let error_cols = [];
+
     // Get the size of the grid.
     const size = document.getElementById("size_entry").value;
+
+    // Clear any displayed errors from the previous request to solve the puzzle.
+    clear_errors(size);
 
     // Initialize the error condition.
     let error = false;
@@ -70,8 +125,10 @@ function submit_puzzle() {
 
         if (row_val) {
             if (verify(size, row_val)) {
-                // If the value is bad, flag it.
+                // If the value is bad, flag it and add the row to the list.
                 error = true;
+
+                error_rows.push(row);
             }
             else {
                 // If the row was entered, set the table data to the values.
@@ -94,8 +151,10 @@ function submit_puzzle() {
 
         if (col_val) {
             if (verify(size, col_val)) {
-                // If the value is bad, flag it.
+                // If the value is bad, flag it and add the column to the list.
                 error = true;
+
+                error_cols.push(col);
             }
             else {
                 // If the column was entered, set the table data to the values.
@@ -117,6 +176,11 @@ function submit_puzzle() {
         pywebview.api.solve(parseInt(size), horizontal, vertical).then(solved_callback);
     }
     else {
+        // Invert the colors for the entry boxes with invalid values.  This inverts the color
+        // instead of setting the border to red, for instance, so that color-blind people are also
+        // able to see the alerts.
+        update_errors(error_rows, error_cols);
+
         alert("Please ensure that the entered values are all numeric and that they are not" +
               "larger than the grid size (including padding between the digits).");
     }
