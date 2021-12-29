@@ -1,0 +1,2 @@
+pywebview>=3.5
+cefpython3>=66.1
