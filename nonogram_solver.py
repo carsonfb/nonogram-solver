@@ -498,7 +498,7 @@ class TestCases(unittest.TestCase):
             "110000011000011"
         ]
 
-        solved, empty, passes = solve(length, horizontal_grid, vertical_grid)
+        solved, empty, _ = solve(length, horizontal_grid, vertical_grid)
 
         self.assertEqual(solved, correct_solved)
         self.assertEqual(empty, correct_empty)
