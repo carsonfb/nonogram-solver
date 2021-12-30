@@ -20,6 +20,10 @@ to work under Python 2.x if, for some reason, that is all you have available to 
 4. Install the dependencies with the command *pip install -r requirements.txt* or
 *pip install -r requirements.windows.txt* on Windows.
 
+Usage
+-----
+[![Nonogram Solver usage](https://youtu.be/_fYG6CJxNKw)]
+
 Credits
 -------
 © 2021 [Carson F. Ball](<mailto://carson@ballweb.org>)
