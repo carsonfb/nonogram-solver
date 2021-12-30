@@ -28,7 +28,7 @@ Donations
 ---------
 If you like this project and want to see more source code, please contribute if you are able.
 
-PayPal: [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CT5XNBHGD5TEN)
+PayPal: [![PayPal donation button](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CT5XNBHGD5TEN)
 
 Bitcoin wallet: 3QzgUdXzbLY7oy15XeMJ4W37cfBJDeKj6A
 
