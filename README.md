@@ -22,7 +22,7 @@ to work under Python 2.x if, for some reason, that is all you have available to 
 
 Credits
 -------
-© 2021 Carson F. Ball
+© 2021 Carson F. Ball <mailto://carson@ballweb.org>
 
 Donations
 ---------
