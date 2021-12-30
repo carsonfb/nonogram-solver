@@ -22,7 +22,9 @@ to work under Python 2.x if, for some reason, that is all you have available to 
 
 Usage
 -----
-[![Nonogram Solver usage](https://img.youtu.be/_fYG6CJxNKw/2.jpg)](https://youtu.be/_fYG6CJxNKw)
+For instructions, please watch the YouTube video below.
+
+[![Nonogram Solver usage](https://img.youtube.com/vi/_fYG6CJxNKw/hqdefault.jpg)](https://youtu.be/_fYG6CJxNKw)
 
 Credits
 -------
