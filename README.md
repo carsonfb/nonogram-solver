@@ -17,8 +17,8 @@ to work under Python 2.x if, for some reason, that is all you have available to 
 
 3. Optional, but recommended:  Setup a virtual environment for the project.
 
-4. Install the dependencies with the command *pip install -r requirements.txt* or
-*pip install -r requirements.windows.txt* on Windows.
+4. Install the dependencies with the command `pip install -r requirements.txt` or
+`pip install -r requirements.windows.txt` on Windows.
 
 Usage
 -----
