@@ -5,7 +5,7 @@ This program solves nonogram puzzles.  Nonograms are a type of logic puzzle wher
 numbers are give for each row and column signifying which cells of a grid to fill in and which to
 leave blank.
 
-For more information, please see this Wikipedia article <https://en.wikipedia.org/wiki/Nonogram>.
+For more information, please see this [Wikipedia article](https://en.wikipedia.org/wiki/Nonogram).
 
 Installation
 ------------
