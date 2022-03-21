@@ -113,8 +113,8 @@ def update_existing(col_existing, row_existing):
         one matrix in memory and compares it to the other one.
     """
 
-    for row_index in range(0, len(col_existing)):
-        for col_index in range(0, len(row_existing)):
+    for row_index, _ in enumerate(col_existing):
+        for col_index, _ in enumerate(row_existing):
             if col_existing[row_index][col_index] == '1':
                 row_existing[col_index] \
                     = row_existing[col_index][:row_index] \
@@ -187,7 +187,7 @@ def solve(length, horizontal_grid, vertical_grid):
         vertical_empty, horizontal_empty \
             = update_existing(horizontal_empty, vertical_empty)
 
-        for index in range(0, len(horizontal_grid)):
+        for index, _ in enumerate(horizontal_grid):
             # Find the current patterns for each row.
             patterns = find_options(
                 length,
@@ -202,7 +202,7 @@ def solve(length, horizontal_grid, vertical_grid):
             # Find the empty positions for the available patterns.
             horizontal_empty[index] = find_empty(length, patterns)
 
-        for index in range(0, len(vertical_grid)):
+        for index, _ in enumerate(vertical_grid):
             # Find the current patterns for each column.
             patterns = find_options(
                 length,
