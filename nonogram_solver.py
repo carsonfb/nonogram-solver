@@ -67,9 +67,8 @@ def find_options(length, filled, pattern='', empty=''):
             # If the string has not been fully built yet, then generate the next sub-string.
             subs = find_options(length - len(line), filled[1:])
 
-            for sub in subs:
-                # Append this section with the sub-sections found in the recursion.
-                lines.append(line + sub)
+            # Append this section with the sub-sections found in the recursion.
+            lines.extend([line + sub for sub in subs])
         else:
             # There are no parts left so pad with the remaining blanks.
             line += '0' * total_blanks
@@ -78,30 +77,18 @@ def find_options(length, filled, pattern='', empty=''):
             lines.append(line)
 
     if len(lines[0]) == length and pattern != '':
-        # A filled out pattern was passed in, check to see if the current possibility is valid.
-        temp_lines = []
-
         # Generate a bitmask from the pattern.
         mask = int(pattern, base=2)
 
-        for line in lines:
-            if (int(line, base=2) & mask) == mask:
-                temp_lines.append(line)
-
-            lines = temp_lines
+        # A filled out pattern was passed in, check to see if the current possibility is valid.
+        lines = [line for line in lines if (int(line, base=2) & mask) == mask]
 
     if len(lines[0]) == length and empty != '':
-        # An empty position pattern was passed in, check to see if the current possibility is valid.
-        temp_lines = []
-
         # Generate a bitmask from the empty positions.
         mask = int(empty, base=2)
 
-        for line in lines:
-            if not int(line, base=2) & mask:
-                temp_lines.append(line)
-
-            lines = temp_lines
+        # An empty position pattern was passed in, check to see if the current possibility is valid.
+        lines = [line for line in lines if not int(line, base=2) & mask]
 
     # Return the possible values.
     return lines
@@ -232,7 +219,7 @@ def solve(length, horizontal_grid, vertical_grid):
 
         if (horizontal_existing == horizontal_backup and vertical_existing == vertical_backup):
             # Nothing changed on this last pass.  Set the flag to done so we do not end up in
-            # and infinite loop.
+            # an infinite loop.
             done = 1
 
         passes += 1
