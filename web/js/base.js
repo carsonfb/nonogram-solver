@@ -20,8 +20,16 @@ function display_grid(size) {
         grid += "<td><input id='grid_row_entry_" + row + "' type='text' /></td>";
 
         for (let col = 0; col < size; col++) {
+            // Designate every 5th column to make reading the solution easier.
+            if (col > 0 && !((col + 1) % 5)) {
+                grid_cell = 'grid_cell_divide'
+            }
+            else {
+                grid_cell = 'grid_cell'
+            }
+
             // Fill out the cells.
-            grid += "<td class='grid_cell' id='grid_cell_" + row + "_" + col
+            grid += "<td class='" + grid_cell + "' id='grid_cell_" + row + "_" + col
                  +  "' onClick='toggle_cell(this);'> </td>";
         }
 
