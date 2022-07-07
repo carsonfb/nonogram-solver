@@ -17,7 +17,9 @@
                 <option value="25">25x25</option>
                 <option value="30">30x30</option>
             </select>
-            <button type="button" id="solve_button" name="solve_button" onClick="submit_puzzle();">Solve</button>
+				<input type="hidden" id="max_passes" value="0" />
+            <button type="button" id="solve_button" name="solve_button" onClick="submit_puzzle(0);">Solve</button>
+            <button type="button" id="step_button" name="step_button" onClick="submit_puzzle(1);">Step</button>
 				<span id="passes_span"></span>
         </form>
 

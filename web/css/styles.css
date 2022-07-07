@@ -40,6 +40,10 @@
     visibility: hidden;
 }
 
+#step_button {
+    visibility: hidden;
+}
+
 #passes_span {
     visibility: hidden;
 }

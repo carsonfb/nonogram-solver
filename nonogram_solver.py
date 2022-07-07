@@ -129,13 +129,18 @@ def update_existing(col_existing, row_existing):
 
     return row_existing, col_existing
 
-def solve(length, horizontal_grid, vertical_grid):
+def solve(length, horizontal_grid, vertical_grid, max_passes=0):
     """
         This function will solve a nonogram given the length, horizontal_grid, and vertical_grid.
 
         Currently, passing in a partially solved puzzle is not supported.  The way nonograms are
         setup, it should never be required to have a partially solved puzzle to beging with unlike,
-        for instance, sudokos.
+        for instance, sudokus.
+
+        Even if previous steps have been processed, if max_passes has been passed, the solver
+        starts from the beginning again.  This is because the user may have edited the puzzle
+        row and column numbers which would change the solution.  Even 25x25 puzzles are solved in
+        under a second, so this should not be an issue from a user-perspective.
     """
 
     # Initialize the existing tables.
@@ -223,6 +228,11 @@ def solve(length, horizontal_grid, vertical_grid):
             done = 1
 
         passes += 1
+
+        if passes == int(max_passes):
+            # This allows for iterating through the solution one step at a time.
+            # It was a feature request from a YouTube user.
+            done = 1
 
     return horizontal_existing, horizontal_empty, passes
 

@@ -20,8 +20,12 @@ function display_grid(size) {
         grid += "<td><input id='grid_row_entry_" + row + "' type='text' /></td>";
 
         for (let col = 0; col < size; col++) {
-            // Designate every 5th column to make reading the solution easier.
             if (col > 0 && !((col + 1) % 5)) {
+                // Indicate every 5th column to make reading the solution easier.
+                grid_cell = 'grid_cell_divide'
+            }
+            else if (row > 0 && !((row + 1) % 5)) {
+                // Indicate every 5th row to make reading the solution easier.
                 grid_cell = 'grid_cell_divide'
             }
             else {
@@ -38,9 +42,10 @@ function display_grid(size) {
 
     grid += "</form></table>";
 
-    // Display the grid.
+    // Display the grid and the solution buttons.
     document.getElementById("nonogram_grid").innerHTML = grid;
     document.getElementById("solve_button").style.visibility = "visible";
+    document.getElementById("step_button").style.visibility = "visible";
 }
 
 function toggle_cell(cell) {
@@ -104,7 +109,7 @@ function update_errors(error_rows, error_cols) {
     }
 }
 
-function submit_puzzle() {
+function submit_puzzle(step_through) {
     /* This function submits the filled out puzzle to the back-end to be solved. */
 
     // Initialize the tables.
@@ -180,7 +185,16 @@ function submit_puzzle() {
            unlike, for instance, sudokos.
         */
 
-        pywebview.api.solve(parseInt(size), horizontal, vertical).then(solved_callback);
+        let max_passes = 0;
+
+        if (step_through) {
+            // Increment the maximum passes on the form.
+            document.getElementById("max_passes").value++;
+
+            max_passes = document.getElementById("max_passes").value;
+        }
+
+        pywebview.api.solve(parseInt(size), horizontal, vertical, max_passes).then(solved_callback);
     }
     else {
         /* Invert the colors for the entry boxes with invalid values.  This inverts the color
