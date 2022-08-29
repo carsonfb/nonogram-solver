@@ -32,7 +32,7 @@ Credits
 
 Donations
 ---------
-If you like this project and want to see more source code, please contribute if you are able.
+If you like this project and want to see more projects from me, please contribute if you are able.
 
 PayPal: [![PayPal donation button](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CT5XNBHGD5TEN)
 
@@ -50,7 +50,8 @@ You can share this code (including your own modifications) as long as the follow
 met.  Please see the links below for more information.
 
 1. You state somewehere in the program credits (and documentation if applicable) that Carson F. Ball
-is the original author and list the location that the original can be downloaded (LINK HERE).
+is the original author and list the location that the original can be downloaded
+(https://github.com/carsonfb/nonogram-solver).
 
 2. You do not claim that Carson F. Ball endorses or approved of any modifications that you make and
 you clearly indicate that you have made modifications.
