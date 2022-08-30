@@ -38,9 +38,9 @@ PayPal: [![PayPal donation button](https://www.paypalobjects.com/en_US/i/btn/btn
 
 Bitcoin wallet: 3QzgUdXzbLY7oy15XeMJ4W37cfBJDeKj6A
 
-Webull affiliate link: https://a.webull.com/8XVE5sOKtu1sPAStxw
+Webull affiliate link: [https://a.webull.com/8XVE5sOKtu1sPAStxw](https://a.webull.com/8XVE5sOKtu1sPAStxw)
 
-Robinhood affiliate link: join.robinhood.com/carsonb453
+Robinhood affiliate link: [join.robinhood.com/carsonb453](join.robinhood.com/carsonb453)
 
 License
 -------
