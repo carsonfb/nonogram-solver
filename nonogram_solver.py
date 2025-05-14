@@ -19,7 +19,7 @@
     speed would not be noticeable and neither would the impact on memory consumption in any
     significant way.  So, for the sake of readability, I left it using two copies of each grid.
 
-    There are likely much better algorithms that what has been implemented here. I mostly wrote this
+    There are likely much better algorithms than what has been implemented here. I mostly wrote this
     as a proof-of-concept and actively avoided looking up solving algorithms to see if I could
     write a solution unassisted.
 
