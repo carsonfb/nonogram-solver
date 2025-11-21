@@ -4,7 +4,7 @@ You can share this code (including your own modifications) as long as the follow
 met.  Please see the links below for more information.
 
 1. You state somewehere in the program credits (and documentation if applicable) that Carson F. Ball
-is the original author and list the location that the original can be downloaded
+is the original author and list the location that the original can be [downloaded]
 (https://github.com/carsonfb/nonogram-solver).
 
 2. You do not claim that Carson F. Ball endorses or approved of any modifications that you make and
